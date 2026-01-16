@@ -4,7 +4,6 @@ import { Submission, SubmissionRepository } from "../../domain/submission";
 export class SqlSubmissionRepository
     implements SubmissionRepository
 {
-
     async add(submission: Submission): Promise<void> {
         if (!submission.id) {
             throw new Error("Submission.id is required");
@@ -57,8 +56,6 @@ export class SqlSubmissionRepository
         );
     }
 
-    /* ------------------ Reads ------------------ */
-
     async findById(id: string): Promise<Submission | null> {
         const res = await db.query(
             `SELECT * FROM submissions WHERE id = $1`,
@@ -74,19 +71,12 @@ export class SqlSubmissionRepository
 
     async getAll(): Promise<Submission[]> {
         const res = await db.query(
-            `
-            SELECT *
-            FROM submissions
-            ORDER BY created_at DESC
-            `
+            `SELECT * FROM submissions ORDER BY created_at DESC`
         );
 
         return res.rows.map(mapSubmission);
     }
 
-    /**
-     * Atomically claims the oldest PENDING submissions.
-     */
     async claimPendingBatch(
         limit: number,
         workerId: string
@@ -113,7 +103,6 @@ export class SqlSubmissionRepository
         return res.rows.map(mapSubmission);
     }
 
-
     async update(s: Submission): Promise<void> {
         await db.query(
             `
@@ -134,9 +123,7 @@ export class SqlSubmissionRepository
         );
     }
 
-    async findStuckRunning(
-        timeoutMs: number
-    ): Promise<Submission[]> {
+    async findStuckRunning(timeoutMs: number): Promise<Submission[]> {
         const res = await db.query(
             `
             SELECT *
@@ -155,11 +142,40 @@ export class SqlSubmissionRepository
             `
             UPDATE submissions
             SET status = 'PENDING',
-                started_at = NULL
+                started_at = NULL,
+                worker_id = NULL
             WHERE id = $1
             `,
             [id]
         );
+    }
+
+    /**
+     * Deletes a single submission.
+     * Does not affect others.
+     */
+    async delete(id: string): Promise<void> {
+        const res = await db.query(
+            `DELETE FROM submissions WHERE id = $1`,
+            [id]
+        );
+
+        if (res.rowCount === 0) {
+            throw new Error(`Submission ${id} not found`);
+        }
+    }
+
+    /**
+     * Deletes all submissions for a problem.
+     * Returns number of deleted rows.
+     */
+    async deleteByProblem(problemId: string): Promise<number> {
+        const res = await db.query(
+            `DELETE FROM submissions WHERE problem_id = $1`,
+            [problemId]
+        );
+
+        return res.rowCount ?? 0;
     }
 }
 

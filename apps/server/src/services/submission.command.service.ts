@@ -20,7 +20,7 @@ export class SubmissionCommandService {
             createdAt: new Date()
         };
 
-        await this.submissionRepo.create(submission);
+        await this.submissionRepo.add(submission);
         return submission;
     }
 

@@ -62,8 +62,18 @@ export class SqlProblemRepository
 
         return mapProblem(res.rows[0]);
     }
-}
 
+    async removeById(id: string): Promise<void> {
+        await db.query(
+            `DELETE FROM problems WHERE id = $1`,
+            [id]
+        );
+    }
+
+    async removeAll(): Promise<void> {
+        await db.query(`DELETE FROM problems`);
+    }
+}
 
 function mapProblem(row: any): Problem {
     return {

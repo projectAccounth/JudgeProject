@@ -56,8 +56,27 @@ export class SqlTestCaseRepository
 
         return res.rows.map(mapTestCase);
     }
-}
+    
+    async removeById(id: string): Promise<void> {
+        await db.query(
+            `DELETE FROM testcases WHERE id = $1`,
+            [id]
+        );
+    }
 
+    async removeByTestCaseSet(
+        testcaseSetId: string
+    ): Promise<void> {
+        await db.query(
+            `DELETE FROM testcases WHERE testcase_set_id = $1`,
+            [testcaseSetId]
+        );
+    }
+
+    async removeAll(): Promise<void> {
+        await db.query(`DELETE FROM testcases`);
+    }
+}
 
 function mapTestCase(row: any): TestCase {
     return {

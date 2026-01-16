@@ -24,17 +24,18 @@ export interface Submission {
     finishedAt?: Date;
 }
 
-export interface SubmissionRepository { 
-    create(submission: Submission): Promise<void>; 
-    findById(id: string): Promise<Submission | null>; 
-    update(submission: Submission): Promise<void>; 
-    // findNextPending(): Promise<Submission | null>; 
+export interface SubmissionRepository {
+    add(submission: Submission): Promise<void>;
+    findById(id: string): Promise<Submission | null>;
     getAll(): Promise<Submission[]>;
+    update(submission: Submission): Promise<void>;
+
+    claimPendingBatch(limit: number, workerId: string): Promise<Submission[]>;
     findStuckRunning(timeoutMs: number): Promise<Submission[]>;
-    claimPendingBatch(
-        limit: number,
-        workerId: string
-    ): Promise<Submission[]>;
+    resetToPending(id: string): Promise<void>;
+
+    delete(id: string): Promise<void>;
+    deleteByProblem(problemId: string): Promise<number>;
 }
 
 export interface SubmissionQueue {
