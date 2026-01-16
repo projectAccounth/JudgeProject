@@ -1,4 +1,3 @@
-import { SubmissionRepository } from "../domain/submission";
 import { SqlSubmissionRepository } from "../repositories/sql/submission.repository.sql";
 
 export function startStuckRecovery(

@@ -1,12 +1,10 @@
 FROM python:3.12-slim
 
-RUN apt-get update \
-    && apt-get install -y jq \
-    && rm -rf /var/lib/apt/lists/*
+RUN useradd -m judge
 
-WORKDIR /workspace
+WORKDIR /sandbox
+USER judge
 
-COPY run.sh /run.sh
-RUN chmod +x /run.sh
+COPY runner.py /sandbox/runner.py
 
-ENTRYPOINT ["/run.sh"]
+ENTRYPOINT ["python3", "/sandbox/runner.py"]

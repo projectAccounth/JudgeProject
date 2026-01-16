@@ -30,7 +30,7 @@ export function createWorkerContainer() {
             await submissionRepo.update({
                 ...sub,
                 status: "PENDING",
-                startedAt: undefined
+                startedAt: new Date()
             });
         }
     }, INTERVAL_MS);
