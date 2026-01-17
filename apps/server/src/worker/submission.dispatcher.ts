@@ -5,26 +5,34 @@ export function startSqlDispatcher(
     repo: SqlSubmissionRepository,
     executor: SubmissionExecutionService
 ) {
+    const inflight = new Map<string, Promise<void>>();
+
     const WORKER_ID = crypto.randomUUID();
     const INTERVAL_MS = 1000;
     const BATCH_SIZE = 4;
 
     setInterval(async () => {
-        const claimed =
-            await repo.claimPendingBatch(
-                BATCH_SIZE,
-                WORKER_ID
-            );
+        if (inflight.size >= BATCH_SIZE) {
+            return;
+        }
+
+        const capacity = BATCH_SIZE - inflight.size;
+
+        const claimed = await repo.claimPendingBatch(
+            capacity,
+            WORKER_ID
+        );
 
         for (const sub of claimed) {
-            executor
-                .execute(sub.id)
+            const p = executor.execute(sub.id)
                 .catch((err: any) => {
-                    console.error(
-                        "Execution failed",
-                        err
-                    );
+                    console.error("Execution failed", err);
+                })
+                .finally(() => {
+                    inflight.delete(sub.id);
                 });
+
+            inflight.set(sub.id, p);
         }
     }, INTERVAL_MS);
 }

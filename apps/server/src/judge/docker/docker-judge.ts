@@ -68,85 +68,44 @@ export class DockerJudge implements Judge {
         dir: string,
         limits: { timeMs: number; memoryMb: number }
     ): Promise<RunOutcome> {
-        const containerName =
-            `judge-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+        const args = this.buildDockerArgs(dir, limits);
 
-        const args = this.buildDockerArgs(dir, limits, containerName);
+        return new Promise((resolve) => {
+            execFile(
+                "docker",
+                args,
+                { timeout: limits.timeMs },
+                (err) => {
+                    if (!err) {
+                        resolve("OK");
+                        return;
+                    }
 
-        return new Promise((resolve, reject) => {
-            const proc = spawn("docker", args, { stdio: "ignore" });
+                    // node timeout
+                    if ((err as any).killed) {
+                        resolve("TLE");
+                        return;
+                    }
 
-            let finished = false;
-
-            const killHard = async () => {
-                await exec("docker", ["kill", containerName]);
-            };
-
-            const killSoft = async () => {
-                await exec("docker", ["stop", "-t", "1", containerName]);
-            };
-
-            const timer = setTimeout(async () => {
-                if (finished) return;
-                finished = true;
-
-                await killSoft();
-                setTimeout(killHard, 500);
-
-                resolve("TLE");
-            }, limits.timeMs);
-
-            proc.on("exit", async () => {
-                if (finished) return;
-                finished = true;
-
-                clearTimeout(timer);
-
-                try {
-                    const info = await this.inspectContainer(containerName);
-
-                    if (info.oomKilled) {
+                    // oom sigkill
+                    if ((err as any).code === 137) {
                         resolve("OOM");
                         return;
                     }
 
                     resolve("OK");
-                } catch (err) {
-                    reject(err);
                 }
-            });
-
-            proc.on("error", err => {
-                if (finished) return;
-                finished = true;
-
-                clearTimeout(timer);
-                reject(err);
-            });
+            );
         });
     }
 
     private buildDockerArgs(
         dir: string,
-        limits: { timeMs: number; memoryMb: number },
-        name: string
+        limits: { timeMs: number; memoryMb: number }
     ): string[] {
-        const isLinux = os.platform() === "linux";
-
-        const mounts = [
-            ["src", "ro"],
-            ["tests", "ro"],
-            ["limits", "ro"],
-            ["out", "rw"]
-        ].flatMap(([name, mode]) => [
-            "-v",
-            `${this.normalizePath(path.join(dir, name))}:/sandbox/${name}:${mode}`
-        ]);
-
-        const args: string[] = [
+        return [
             "run",
             "--rm",
-            "--name", name,
 
             "--network=none",
             "--pids-limit=64",
@@ -154,53 +113,19 @@ export class DockerJudge implements Judge {
             `--memory=${limits.memoryMb}m`,
             "--read-only",
 
-            ...mounts,
+            "-v", `${this.normalizePath(path.join(dir, "src"))}:/sandbox/src:ro`,
+            "-v", `${this.normalizePath(path.join(dir, "tests"))}:/sandbox/tests:ro`,
+            "-v", `${this.normalizePath(path.join(dir, "limits"))}:/sandbox/limits:ro`,
+            "-v", `${this.normalizePath(path.join(dir, "out"))}:/sandbox/out:rw`,
 
             "judge-python"
         ];
-
-        if (isLinux) {
-            args.splice(
-                6,
-                0,
-                "--cap-drop=ALL",
-                "--security-opt=no-new-privileges",
-                "--security-opt=seccomp=default",
-                "--ulimit", `cpu=${Math.ceil(limits.timeMs / 1000)}`
-            );
-        }
-
-        return args;
     }
 
     private normalizePath(p: string): string {
         return os.platform() === "win32"
             ? p.replaceAll(/\\/g, "/")
             : p;
-    }
-
-    private async inspectContainer(id: string): Promise<{
-        exitCode: number;
-        oomKilled: boolean;
-    }> {
-        return new Promise((resolve, reject) => {
-            execFile(
-                "docker",
-                ["inspect", id, "--format", "{{.State.ExitCode}} {{.State.OOMKilled}}"],
-                (err, stdout) => {
-                    if (err) {
-                        reject(err);
-                        return;
-                    }
-
-                    const [code, oom] = stdout.trim().split(" ");
-                    resolve({
-                        exitCode: Number(code),
-                        oomKilled: oom === "true"
-                    });
-                }
-            );
-        });
     }
 
     private makeSyntheticResult(

@@ -1,5 +1,4 @@
 import { SubmissionCommandService } from "../services/submission.command.service";
-import { submissionQueue } from "../queue/submission.queue";
 import { Submission } from "../domain/submission";
 
 export class SubmissionController {
@@ -14,10 +13,6 @@ export class SubmissionController {
                 userId,
                 sourceCode
             );
-
-        await submissionQueue.add("run", {
-            submissionId: submission.id
-        });
 
         return {
             id: submission.id,

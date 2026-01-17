@@ -37,7 +37,3 @@ export interface SubmissionRepository {
     delete(id: string): Promise<void>;
     deleteByProblem(problemId: string): Promise<number>;
 }
-
-export interface SubmissionQueue {
-    enqueue(submissionId: string): Promise<void>;
-}
