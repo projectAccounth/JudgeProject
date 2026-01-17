@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx src/server.ts",
-    "build": "tsc",
-    "start": "node dist/server.js"
+    "dev": "tsx src/bootstrap.ts",
+    "build": "tsc -b",
+    "start": "tsc -b && node dist/bootstrap.js"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +22,7 @@
     "@types/bcrypt": "^6.0.0",
     "@types/node": "^25.0.8",
     "@types/pg": "^8.16.0",
+    "jest": "^30.2.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }

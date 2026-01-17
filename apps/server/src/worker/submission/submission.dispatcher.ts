@@ -1,5 +1,6 @@
-import { SqlSubmissionRepository } from "../repositories/sql/submission.repository.sql";
-import { SubmissionExecutionService } from "../services/submission.service";
+import { SqlSubmissionRepository } from "../../repositories/sql/submission.repository.sql";
+import { SubmissionExecutionService } from "../../services/submission.service";
+import { languagePools } from "./docker/pool.languages";
 
 export function startSqlDispatcher(
     repo: SqlSubmissionRepository,
@@ -12,6 +13,7 @@ export function startSqlDispatcher(
     const BATCH_SIZE = 4;
 
     setInterval(async () => {
+        if (!languagePools.isInitialized()) return;
         if (inflight.size >= BATCH_SIZE) {
             return;
         }

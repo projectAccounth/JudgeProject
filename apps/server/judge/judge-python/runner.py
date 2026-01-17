@@ -22,15 +22,19 @@ start = time.time()
 
 def write_result(status):
     elapsed_ms = int((time.time() - start) * 1000)
-    OUT.write_text(json.dumps({
-        "status": status,
-        "stdout": stdout_all,
-        "stderr": stderr_all,
-        "timeMs": elapsed_ms,
-        "memoryKb": 0,
-        "passed": passed,
-        "total": total
-    }))
+    try:
+        OUT.write_text(json.dumps({
+            "status": status,
+            "stdout": stdout_all,
+            "stderr": stderr_all,
+            "timeMs": elapsed_ms,
+            "memoryKb": 0,
+            "passed": passed,
+            "total": total
+        }))
+    except Exception as e:
+        print("WRITE ERROR:", e, file=sys.stderr)
+        sys.exit(1)
 
 for tc in tests:
     proc = subprocess.run(

@@ -1,4 +1,3 @@
-import { Worker } from "node:worker_threads";
 import { buildApp } from "./app";
 import { env } from "./config/env";
 import { spawn } from "node:child_process";
@@ -15,15 +14,16 @@ async function start() {
 }
 
 start();
-const child = spawn('node', ['dist/worker.js'], {
+
+const submissionWorker = spawn('node', ['dist/worker.js'], {
     detached: true,
     stdio: "pipe"
 });
 
-child.stdout.on('data', (data) => {
-  console.log(`stdout: ${data}`);
+submissionWorker.stdout.on('data', (data) => {
+    console.log(`\x1b[32m[SubmissionWorker/INFO]\x1b[0m: ${data}`);
 });
 
-child.stderr.on('data', (data) => {
-  console.error(`stderr: ${data}`);
+submissionWorker.stderr.on('data', (data) => {
+    console.error(`\x1b[32m[SubmissionWorker/INFO]\x1b[0m: ${data}`);
 });

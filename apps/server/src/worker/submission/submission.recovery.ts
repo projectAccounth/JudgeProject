@@ -1,4 +1,4 @@
-import { SqlSubmissionRepository } from "../repositories/sql/submission.repository.sql";
+import { SqlSubmissionRepository } from "../../repositories/sql/submission.repository.sql";
 
 export function startStuckRecovery(
     repo: SqlSubmissionRepository

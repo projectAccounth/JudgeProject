@@ -1,5 +1,5 @@
-import { createWorkerContainer } from "./worker/container";
-import { startSqlDispatcher } from "./worker/submission.dispatcher";
+import { createWorkerContainer } from "./worker/submission/container";
+import { startSqlDispatcher } from "./worker/submission/submission.dispatcher";
 
 async function main() {
     const { submissionService, submissionRepo } = createWorkerContainer();

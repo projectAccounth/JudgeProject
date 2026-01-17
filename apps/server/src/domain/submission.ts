@@ -1,3 +1,4 @@
+import { Language } from "../users/auth/util";
 import { JudgeResult } from "./judge";
 
 export type SubmissionStatus =
@@ -12,7 +13,7 @@ export interface Submission {
     problemId: string;
     userId: string;
 
-    language: string;
+    language: Language;
 
     sourceCode: string;
 

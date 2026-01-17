@@ -15,16 +15,14 @@ export function buildApp() {
         loggerInstance: {
             info: (msg: any, ...args: any) => {
                 const logMsg = typeof msg === 'object' ? (msg.msg || '') : msg;
-            
-                // Use util.format for safe printing without the internal object bloat
                 console.log(`\x1b[32m[INFO]\x1b[0m`, logMsg, ...args);
             },
             error: (msg: unknown) => console.error(`[ERROR] ${msg}`),
             debug: (msg: unknown) => console.debug(`[DEBUG] ${msg}`),
             fatal: (msg: unknown) => console.error(`[FATAL] ${msg}`),
-            warn: (msg: unknown) => console.warn(`[WARN] ${msg}`),
+            warn:  (msg: unknown) => console.warn(`[WARN] ${msg}`),
             trace: (msg: unknown) => console.trace(`[TRACE] ${msg}`),
-            child: function() { return this }, // Required for request-specific logging
+            child: function() { return this },
             silent: (msg: unknown) => console.info(msg),
             level: 'info'
         }

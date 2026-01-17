@@ -7,4 +7,4 @@ USER judge
 
 COPY runner.py /sandbox/runner.py
 
-ENTRYPOINT ["python3", "/sandbox/runner.py"]
+CMD ["sleep", "infinity"]
