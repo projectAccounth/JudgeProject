@@ -2,12 +2,12 @@ import json;
 import subprocess;
 import sys;
 import time;
-import py_compile;
 from pathlib import Path;
 
 ROOT = Path("/sandbox");
 
-SRC = ROOT / "src" / "Main.py";
+SRC = ROOT / "src" / "Main.cpp";
+BIN = ROOT / "out" / "main";
 TESTS = ROOT / "tests" / "testcases.json";
 OUT = ROOT / "out" / "result.json";
 LIMITS = ROOT / "limits" / "limits.json";
@@ -26,35 +26,34 @@ start = time.time();
 
 def write_result(status):
     elapsed_ms = int((time.time() - start) * 1000);
-    try:
-        OUT.write_text(json.dumps({
-            "status": status,
-            "stdout": stdout_all,
-            "stderr": stderr_all,
-            "timeMs": elapsed_ms,
-            "memoryKb": 0,
-            "passed": passed,
-            "total": total
-        }));
-    except Exception as e:
-        print("WRITE ERROR:", e, file=sys.stderr);
-        sys.exit(1);
-
+    OUT.write_text(json.dumps({
+        "status": status,
+        "stdout": stdout_all,
+        "stderr": stderr_all,
+        "timeMs": elapsed_ms,
+        "memoryKb": 0,
+        "passed": passed,
+        "total": total
+    }));
 
 def normalize(s):
     return "\n".join(line.rstrip() for line in s.rstrip().splitlines());
 
-try:
-    py_compile.compile(str(SRC), cfile=ROOT/"out" /".pyc_check", doraise=True);
-except py_compile.PyCompileError as e:
-    stderr_all += str(e);
+compile_proc = subprocess.run(
+    ["g++", str(SRC), "-O2", "-save-temps=obj", "-std=gnu++20", "-o", str(BIN)],
+    capture_output=True,
+    text=True
+);
+
+if compile_proc.returncode != 0:
+    stderr_all += compile_proc.stderr;
     write_result("CE");
     sys.exit(0);
 
 for tc in tests:
     try:
         proc = subprocess.run(
-            ["python3", str(SRC)],
+            [str(BIN)],
             input=tc["input"],
             text=True,
             capture_output=True,
@@ -78,6 +77,5 @@ for tc in tests:
         sys.exit(0);
 
     passed += 1;
-
 
 write_result("AC");

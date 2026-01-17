@@ -11,10 +11,10 @@ export class LanguagePools {
             await this.createPool("judge-python", 512, 4)
         );
 
-        // this.pools.set(
-        //     "cpp",
-        //     await this.createPool("judge-cpp", 1024, 2)
-        // );
+        this.pools.set(
+            "cpp",
+            await this.createPool("judge-cpp", 1024, 4)
+        );
         
         this.initialized = true;
     }

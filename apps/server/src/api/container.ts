@@ -12,6 +12,7 @@ export function createApiContainer() {
         new SubmissionController(submissionService);
 
     return {
-        submissionController
+        submissionController,
+        submissionRepo
     };
 }

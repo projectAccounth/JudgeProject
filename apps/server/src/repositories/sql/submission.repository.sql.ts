@@ -137,6 +137,40 @@ export class SqlSubmissionRepository
         return res.rows.map(mapSubmission);
     }
 
+    async findFailed(): Promise<Submission[]> {
+        const res = await db.query(
+            `
+            SELECT *
+            FROM submissions
+            WHERE status = 'FAILED'
+            `,
+        );
+
+        return res.rows.map(mapSubmission);
+    }
+
+    async recoverInvalid(timeoutMs: number): Promise<Submission[]> {
+        const res = await db.query(
+            `
+            UPDATE submissions
+            SET status = 'PENDING',
+                started_at = NULL,
+                worker_id = NULL
+            WHERE
+                (
+                    status = 'RUNNING'
+                    AND started_at < NOW() - ($1 * INTERVAL '1 millisecond')
+                )
+                OR status = 'FAILED'
+            RETURNING *
+            `,
+            [timeoutMs]
+        );
+
+        return res.rows.map(mapSubmission);
+    }
+
+
     async resetToPending(id: string): Promise<void> {
         await db.query(
             `

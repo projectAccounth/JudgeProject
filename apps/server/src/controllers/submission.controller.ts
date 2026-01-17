@@ -1,17 +1,19 @@
 import { SubmissionCommandService } from "../services/submission.command.service";
 import { Submission } from "../domain/submission";
+import { Language } from "../utils/types";
 
 export class SubmissionController {
     constructor(
         private readonly service: SubmissionCommandService
     ) {}
 
-    async create(problemId: string, sourceCode: string, userId: string) {
+    async create(problemId: string, sourceCode: string, userId: string, pLanguage: Language) {
         const submission =
             await this.service.create(
                 problemId,
                 userId,
-                sourceCode
+                sourceCode,
+                pLanguage
             );
 
         return {

@@ -1,4 +1,5 @@
 import { Submission, SubmissionRepository } from "../domain/submission";
+import { Language } from "../utils/types";
 
 export class SubmissionCommandService {
     constructor(
@@ -8,13 +9,14 @@ export class SubmissionCommandService {
     async create(
         problemId: string,
         userId: string,
-        sourceCode: string
+        sourceCode: string,
+        pLanguage: Language
     ): Promise<Submission> {
         const submission: Submission = {
             id: crypto.randomUUID(),
             problemId,
             userId,
-            language: "python",
+            language: pLanguage,
             sourceCode,
             status: "PENDING",
             createdAt: new Date()
@@ -28,7 +30,7 @@ export class SubmissionCommandService {
         return this.submissionRepo.findById(id);
     }
 
-    async getAll() {
+    async getAll(): Promise<Submission[]> {
         return this.submissionRepo.getAll();
     }
 }

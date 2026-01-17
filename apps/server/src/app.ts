@@ -9,6 +9,8 @@ import { HealthController } from "./controllers/health.controller";
 import { HealthService } from "./services/health.service";
 import { initializeJudge } from "./init/initJudge";
 import { createApiContainer } from "./api/container";
+import { SubmissionScheduler } from "./repositories/in-memory/submission.scheduler.memory";
+import { createWorkerContainer } from "./worker/submission/container";
 
 export function buildApp() {
     const app: FastifyInstance = Fastify({ 
@@ -51,17 +53,20 @@ export function buildApp() {
 
     const echoService: EchoService = new EchoService(new InMemoryEchoRepository());
     const echoController: EchoController = new EchoController(echoService);
-
+    
     const healthService = new HealthService();
     const healthController = new HealthController(healthService);
-    const submissionController = createApiContainer();
+    const { submissionController, submissionRepo } = createApiContainer();
 
-    initializeJudge(app, submissionController);
+    initializeJudge(app, { submissionController });
+    const scheduler: SubmissionScheduler = createWorkerContainer(submissionRepo);
 
     registerRoutes(app, [
         ...echoRoutes(echoController),
         ...healthRoutes(healthController)
     ]);
+
+    scheduler.start();
 
     return app;
 }

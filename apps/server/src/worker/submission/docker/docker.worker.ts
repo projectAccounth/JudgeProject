@@ -97,16 +97,16 @@ export class DockerWorker {
         await fs.cp(src, target, { recursive: true });
     }
 
-    async run(timeMs: number): Promise<RunOutcome> {
+    async run(): Promise<RunOutcome> {
         this.ensureRunning();
 
         try {
-            await execWithTimeout("docker", [
+            await exec("docker", [
                 "exec",
                 this.containerId,
                 "python3",
                 "/sandbox/runner.py"
-            ], timeMs);
+            ]);
             return "OK";
         } catch (e: any) {
             if (e.code === 137) return "OOM";

@@ -3,8 +3,8 @@ import { SubmissionExecutionService } from "../../services/submission.service";
 import { SqlProblemRepository } from "../../repositories/sql/problem.repository.sql";
 import { SqlSubmissionRepository } from "../../repositories/sql/submission.repository.sql";
 import { SqlTestCaseRepository } from "../../repositories/sql/testcase.repository.sql";
-import { startStuckRecovery } from "./submission.recovery";
 import { LanguagePools, languagePools } from "./docker/pool.languages";
+import { SubmissionScheduler } from "../../repositories/in-memory/submission.scheduler.memory";
 
 function registerShutdown(pools: LanguagePools): void {
     const cleanup = async () => {
@@ -23,8 +23,7 @@ function registerShutdown(pools: LanguagePools): void {
     process.on("exit", cleanup);
 }
 
-export function createWorkerContainer() {
-    const submissionRepo = new SqlSubmissionRepository();
+export function createWorkerContainer(submissionRepo: SqlSubmissionRepository) {
     const problemRepo = new SqlProblemRepository();
     const testcaseRepo = new SqlTestCaseRepository();
 
@@ -33,8 +32,6 @@ export function createWorkerContainer() {
 
     const judge = new DockerJudge(languagePools);
 
-    startStuckRecovery(submissionRepo);
-
     const submissionService = new SubmissionExecutionService(
         submissionRepo,
         problemRepo,
@@ -42,23 +39,8 @@ export function createWorkerContainer() {
         judge
     );
 
-    const INTERVAL_MS = 60000;
+    const scheduler: SubmissionScheduler = 
+        new SubmissionScheduler(submissionRepo, submissionService, 8);
 
-    setInterval(async () => {
-        const stuck =
-            await submissionRepo.findStuckRunning(INTERVAL_MS * 10);
-
-        for (const sub of stuck) {
-            await submissionRepo.update({
-                ...sub,
-                status: "PENDING",
-                startedAt: new Date()
-            });
-        }
-    }, INTERVAL_MS);
-
-    return {
-        submissionService,
-        submissionRepo,
-    };
+    return scheduler;
 }

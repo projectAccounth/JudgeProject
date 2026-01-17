@@ -1,4 +1,4 @@
-import { Language } from "../users/auth/util";
+import { Language } from "../utils/types";
 import { JudgeResult } from "./judge";
 
 export type SubmissionStatus =
@@ -33,6 +33,8 @@ export interface SubmissionRepository {
 
     claimPendingBatch(limit: number, workerId: string): Promise<Submission[]>;
     findStuckRunning(timeoutMs: number): Promise<Submission[]>;
+    findFailed(): Promise<Submission[]>;
+    recoverInvalid(timeoutMs: number): Promise<Submission[]>;
     resetToPending(id: string): Promise<void>;
 
     delete(id: string): Promise<void>;

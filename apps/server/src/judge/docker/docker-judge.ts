@@ -4,6 +4,8 @@ import os from "node:os";
 import { Judge, JudgeRequest, JudgeResult } from "../../domain/judge";
 import { LanguagePools } from "../../worker/submission/docker/pool.languages";
 import { normalizePath } from "../../utils/path";
+import { LanguageConfig, LANGUAGES } from "../../domain/languages";
+import { Language } from "../../utils/types";
 
 export class DockerJudge implements Judge {
     constructor(private readonly pools: LanguagePools) {}
@@ -22,7 +24,7 @@ export class DockerJudge implements Judge {
             await worker.copyIn(path.join(stagingDir, "tests"), "tests");
             await worker.copyIn(path.join(stagingDir, "limits"), "limits");
 
-            const outcome = await worker.run(req.limits.timeMs);
+            const outcome = await worker.run();
 
             if (outcome === "TLE") {
                 await worker.reset();
@@ -48,8 +50,9 @@ export class DockerJudge implements Judge {
         await fs.mkdir(path.join(dir, "tests"));
         await fs.mkdir(path.join(dir, "limits"));
 
+        const config: LanguageConfig = LANGUAGES[req.language as Language];
         await fs.writeFile(
-            path.join(dir, "src", "Main.py"),
+            path.join(dir, "src", `Main.${config.extension}`),
             req.sourceCode,
             "utf-8"
         );

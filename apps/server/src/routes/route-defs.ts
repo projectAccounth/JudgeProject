@@ -43,11 +43,13 @@ export const submissionRoutes = (
         schema: {
             body: SubmissionCreateSchema
         },
-        handler: ({ body, user }) =>
-            controller.create(
+        handler: ({ body, user }) => {
+            return controller.create(
                 (body as any).problemId,
-                (body as any).sourceCode
-            , "")
+                (body as any).sourceCode, 
+                (body as any).userId,
+                (body as any).language)
+        }
     },
     {
         method: "GET",
