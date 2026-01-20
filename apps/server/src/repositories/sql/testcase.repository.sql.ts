@@ -56,7 +56,42 @@ export class SqlTestCaseRepository
 
         return res.rows.map(mapTestCase);
     }
-    
+
+    async findHighestOrderByTestCaseSet(
+        testcaseSetId: string
+    ): Promise<TestCase | null> {
+        const res = await db.query(
+            `
+            SELECT *
+            FROM testcases
+            WHERE testcase_set_id = $1
+            ORDER BY ordering DESC
+            LIMIT 1
+            `,
+            [testcaseSetId]
+        );
+
+        if (res.rows.length === 0) {
+            return null;
+        }
+
+        return mapTestCase(res.rows[0]);
+    }
+
+    async findMaxOrderByTestCaseSet(
+        testcaseSetId: string
+    ): Promise<number | null> {
+        const res = await db.query(
+            `
+            SELECT MAX(ordering) AS max_order
+            FROM testcases
+            WHERE testcase_set_id = $1
+            `,
+            [testcaseSetId]
+        );
+
+        return res.rows[0].max_order ?? null;
+    }
     async removeById(id: string): Promise<void> {
         await db.query(
             `DELETE FROM testcases WHERE id = $1`,

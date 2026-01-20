@@ -1,6 +1,6 @@
 import path from "node:path";
 import { promises as fs } from "node:fs";
-import { exec, execCapture, execWithTimeout } from "./utils";
+import { exec, execCapture } from "./utils";
 import { normalizePath } from "../../../utils/path";
 import os from "node:os";
 

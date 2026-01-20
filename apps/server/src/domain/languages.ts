@@ -12,6 +12,18 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
         run: ["python3", "/sandbox/src/Main.py"],
     },
 
+    c: {
+        extension: "c",
+        compile: [
+            "gcc",
+            "/sandbox/src/Main.c",
+            "-O2",
+            "-o",
+            "/sandbox/out/main",
+        ],
+        run: ["/sandbox/out/main"],
+    },
+
     cpp: {
         extension: "cpp",
         compile: [

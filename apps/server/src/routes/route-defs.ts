@@ -1,8 +1,11 @@
+import { ProblemAuthorInput } from "../api/dto/problem-author.dto";
 import { EchoController } from "../controllers/echo.controller";
 import { HealthController } from "../controllers/health.controller";
 import { SubmissionController } from "../controllers/submission.controller";
 import { EchoSchema } from "../schemas/echo.schema";
+import { ProblemCreateSchema, ProblemTestcaseCreateSchema } from "../schemas/problem-create.schema";
 import { SubmissionCreateSchema } from "../schemas/submission.schema";
+import { ProblemAuthoringService } from "../services/problem-author.service";
 import { AppRoute } from "./types";
 
 export const echoRoutes = (controller: EchoController): AppRoute[] => [
@@ -12,12 +15,12 @@ export const echoRoutes = (controller: EchoController): AppRoute[] => [
         schema: {
             body: EchoSchema
         },
-        handler: ({ body }) => controller.create(body as any)
+        handler: async ({ body }) => controller.create(body as any)
     },
     {
         method: "GET",
         path: "/echo",
-        handler: () => controller.list()
+        handler: async () => controller.list()
     }
 ];
 
@@ -25,12 +28,37 @@ export const healthRoutes = (controller: HealthController): AppRoute[] => [
     {
         method: "POST",
         path: "/health",
-        handler: () => controller.create()
+        handler: async () => controller.create()
     },
     {
         method: "GET",
         path: "/health",
-        handler: () => controller.create()
+        handler: async () => controller.create()
+    }
+];
+
+export const problemRoutes = (problemService: ProblemAuthoringService): AppRoute[] => [
+    {
+        method: "POST",
+        path: "/addCase",
+        schema: {
+            body: ProblemTestcaseCreateSchema
+        },
+        handler: async ({ body, user }) => {
+            return await problemService.addTestCase(body as any);
+        }
+    },
+    {
+        method: "POST",
+        path: "/addProblem",
+        schema: {
+            body: ProblemCreateSchema
+        },
+        handler: async ({
+            body, user
+        }) => {
+            return await problemService.addProblem(body as any);
+        }
     }
 ];
 
@@ -43,7 +71,7 @@ export const submissionRoutes = (
         schema: {
             body: SubmissionCreateSchema
         },
-        handler: ({ body, user }) => {
+        handler: async ({ body, user }) => {
             return controller.create(
                 (body as any).problemId,
                 (body as any).sourceCode, 
@@ -54,13 +82,13 @@ export const submissionRoutes = (
     {
         method: "GET",
         path: "/submissions",
-        handler: ({ params }) =>
+        handler: async ({ params }) =>
             controller.getAll()
     },
     {
         method: "GET",
         path: "/submissions/:id",
-        handler: ({ params }) =>
+        handler: async ({ params }) =>
             controller.get((params as any).id)
     }
 ];

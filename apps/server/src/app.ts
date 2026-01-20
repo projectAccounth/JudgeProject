@@ -1,7 +1,7 @@
 import Fastify, { FastifyInstance } from "fastify";
 import { AppError } from "./errors/app-error";
 import { registerRoutes } from "./routes/registry";
-import { echoRoutes, healthRoutes } from "./routes/route-defs";
+import { echoRoutes, healthRoutes, problemRoutes } from "./routes/route-defs";
 import { EchoService } from "./services/echo.service";
 import { EchoController } from "./controllers/echo.controller";
 import { InMemoryEchoRepository } from "./repositories/in-memory/echo.repository.memory";
@@ -9,8 +9,10 @@ import { HealthController } from "./controllers/health.controller";
 import { HealthService } from "./services/health.service";
 import { initializeJudge } from "./init/initJudge";
 import { createApiContainer } from "./api/container";
-import { SubmissionScheduler } from "./repositories/in-memory/submission.scheduler.memory";
 import { createWorkerContainer } from "./worker/submission/container";
+import { AuthService } from "./services/auth.service";
+import { SqlUserRepository } from "./repositories/sql/user.repository.sql";
+import { SqlSessionRepository } from "./repositories/sql/session.repository.sql";
 
 export function buildApp() {
     const app: FastifyInstance = Fastify({ 
@@ -58,15 +60,37 @@ export function buildApp() {
     const healthController = new HealthController(healthService);
     const { submissionController, submissionRepo } = createApiContainer();
 
+    const userRepository = new SqlUserRepository();
+    const sessionRepository = new SqlSessionRepository();
+    const authService = new AuthService(userRepository, sessionRepository);
+
+    app.register(require("@fastify/cookie"));
+    app.addHook("preHandler", async (req: any, res: any) => {
+        const sid = req.cookies?.sid;
+        if (!sid) {
+            return;
+        }
+
+        const user = await authService.validateSession(sid);
+        if (!user) {
+            return;
+        }
+
+        req.user = user;
+        req.sessionId = sid;
+    });
+
     initializeJudge(app, { submissionController });
-    const scheduler: SubmissionScheduler = createWorkerContainer(submissionRepo);
+    const { scheduler, authoringService } = createWorkerContainer(submissionRepo);
 
     registerRoutes(app, [
         ...echoRoutes(echoController),
-        ...healthRoutes(healthController)
+        ...healthRoutes(healthController),
+        ...problemRoutes(authoringService)
     ]);
 
     scheduler.start();
 
     return app;
 }
+

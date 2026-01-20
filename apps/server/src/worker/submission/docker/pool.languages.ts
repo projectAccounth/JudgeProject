@@ -8,7 +8,7 @@ export class LanguagePools {
     async init(): Promise<void> {
         this.pools.set(
             "python",
-            await this.createPool("judge-python", 512, 4)
+            await this.createPool("judge-python", 1024, 4)
         );
 
         this.pools.set(
@@ -16,6 +16,11 @@ export class LanguagePools {
             await this.createPool("judge-cpp", 1024, 4)
         );
         
+        this.pools.set(
+            "c",
+            await this.createPool("judge-c", 1024, 4)
+        );
+
         this.initialized = true;
     }
 

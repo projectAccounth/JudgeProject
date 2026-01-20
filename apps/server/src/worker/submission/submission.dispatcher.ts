@@ -2,7 +2,7 @@ import { SqlSubmissionRepository } from "../../repositories/sql/submission.repos
 import { SubmissionExecutionService } from "../../services/submission.service";
 import { languagePools } from "./docker/pool.languages";
 
-export function startSqlDispatcher(
+export function startDispatcher(
     repo: SqlSubmissionRepository,
     executor: SubmissionExecutionService
 ) {

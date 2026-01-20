@@ -23,22 +23,16 @@ export class ProblemAuthoringService {
 
         if (existing) {
             if (policy === "FAIL") {
-                throw new Error(
-                    `Problem with id=${input.id} already exists`
-                );
+                throw new Error(`Problem with id=${input.id} already exists`);
             }
 
-            if (policy === "REPLACE") {
-                await this.testcaseRepo.removeByTestCaseSet(
-                    existing.testcaseSetId
-                );
-                await this.problemRepo.removeById(existing.id);
-            }
+            await this.testcaseRepo.removeByTestCaseSet(
+                existing.testcaseSetId
+            );
+            await this.problemRepo.removeById(existing.id);
         }
 
-        if (input.testcases.length === 0) {
-            throw new Error("Problem must have at least one testcase");
-        }
+        this.assertHasTestcases(input);
 
         const testcaseSetId = crypto.randomUUID();
         const now = new Date();
@@ -55,15 +49,64 @@ export class ProblemAuthoringService {
             updatedAt: now
         });
 
-        let order = 1;
-        const seenSamples = new Set<string>();
+        await this.insertTestcases(
+            testcaseSetId,
+            input.testcases,
+            1
+        );
+    }
 
-        for (const tc of input.testcases) {
+    async addTestCase(
+        input: Pick<ProblemAuthorInput, "id" | "testcases">
+    ): Promise<void> {
+        const existing = await this.problemRepo.findById(input.id);
+
+        if (!existing) {
+            throw new Error(
+                `Problem with id=${input.id} does not exist`
+            );
+        }
+
+        this.assertHasTestcases(input);
+
+        const startOrder =
+            (await this.testcaseRepo.findMaxOrderByTestCaseSet(
+                existing.testcaseSetId
+            )) ?? 0;
+
+        await this.insertTestcases(
+            existing.testcaseSetId,
+            input.testcases,
+            startOrder + 1
+        );
+    }
+
+    private assertHasTestcases(
+        input: { testcases: unknown[] }
+    ): void {
+        if (input.testcases.length === 0) {
+            throw new Error(
+                "Problem must have at least one testcase"
+            );
+        }
+    }
+
+    private async insertTestcases(
+        testcaseSetId: string,
+        testcases: ProblemAuthorInput["testcases"],
+        startingOrder: number
+    ): Promise<void> {
+        let order = startingOrder;
+        const seenSampleInputs = new Set<string>();
+
+        for (const tc of testcases) {
             if (tc.visibility === "SAMPLE") {
-                if (seenSamples.has(tc.input)) {
-                    throw new Error("Duplicate SAMPLE testcase input");
+                if (seenSampleInputs.has(tc.input)) {
+                    throw new Error(
+                        "Duplicate SAMPLE testcase input"
+                    );
                 }
-                seenSamples.add(tc.input);
+                seenSampleInputs.add(tc.input);
             }
 
             await this.testcaseRepo.add({

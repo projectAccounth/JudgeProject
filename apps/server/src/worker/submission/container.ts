@@ -5,6 +5,7 @@ import { SqlSubmissionRepository } from "../../repositories/sql/submission.repos
 import { SqlTestCaseRepository } from "../../repositories/sql/testcase.repository.sql";
 import { LanguagePools, languagePools } from "./docker/pool.languages";
 import { SubmissionScheduler } from "../../repositories/in-memory/submission.scheduler.memory";
+import { ProblemAuthoringService } from "../../services/problem-author.service";
 
 function registerShutdown(pools: LanguagePools): void {
     const cleanup = async () => {
@@ -39,8 +40,16 @@ export function createWorkerContainer(submissionRepo: SqlSubmissionRepository) {
         judge
     );
 
+    const authoringService = new ProblemAuthoringService(
+        problemRepo,
+        testcaseRepo
+    );
+
     const scheduler: SubmissionScheduler = 
         new SubmissionScheduler(submissionRepo, submissionService, 8);
 
-    return scheduler;
+    return {
+        scheduler,
+        authoringService
+    };
 }

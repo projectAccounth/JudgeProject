@@ -184,10 +184,6 @@ export class SqlSubmissionRepository
         );
     }
 
-    /**
-     * Deletes a single submission.
-     * Does not affect others.
-     */
     async delete(id: string): Promise<void> {
         const res = await db.query(
             `DELETE FROM submissions WHERE id = $1`,

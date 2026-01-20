@@ -1,3 +1,5 @@
+import { User } from "../domain/user";
+
 export interface AppRoute<TBody = unknown, TParams = unknown> {
     method: "GET" | "POST" | "PUT" | "DELETE";
     path: string;
@@ -5,9 +7,11 @@ export interface AppRoute<TBody = unknown, TParams = unknown> {
         body?: unknown;
         params?: unknown;
     };
+    auth?: "OPTIONAL" | "REQUIRED";
     handler: (ctx: {
         body: TBody;
         params: TParams;
-        user?: { id: string };
+        user?: User;
+        sessionId?: string;
     }) => Promise<unknown>;
 }

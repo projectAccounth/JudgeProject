@@ -10,4 +10,10 @@ export interface TestCaseRepository {
         testcaseSetId: string
     ): Promise<void>;
     removeAll(): Promise<void>;
+    findHighestOrderByTestCaseSet(
+        testcaseSetId: string
+    ): Promise<TestCase | null>;
+    findMaxOrderByTestCaseSet(
+        testcaseSetId: string
+    ): Promise<number | null>;
 }
