@@ -63,7 +63,7 @@ async function analyzeSubmission(submission: Submission, userLanguage: string): 
 
     let aiExplanation = "";
     let aiTip = "";
-    let aiPassRate = "";
+    const aiPassRate = "";
 
     // If no compiler errors and some tests failed, use Ollama for logic analysis
     const hasCompilerError = allStderr?.includes("error");

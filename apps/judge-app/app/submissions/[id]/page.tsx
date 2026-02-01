@@ -168,9 +168,9 @@ export default function SubmissionDetailPage({ params }: { params: Promise<Submi
                             language={
                                 submission.language === "python"
                                     ? "python" :
-                                submission.language === "cpp"
-                                    ? "cpp"
-                                    : "javascript"
+                                    submission.language === "cpp"
+                                        ? "cpp"
+                                        : "javascript"
                             }
                             onChange={() => {}}
                             readOnly={true}

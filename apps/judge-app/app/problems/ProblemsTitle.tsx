@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import styles from "./Problems.module.css";
 
 export default function ProblemsTitle() {
-  const { t } = useTranslation();
+    const { t } = useTranslation();
 
-  return <h1 className={styles.title}>{t("problems.title")}</h1>;
+    return <h1 className={styles.title}>{t("problems.title")}</h1>;
 }

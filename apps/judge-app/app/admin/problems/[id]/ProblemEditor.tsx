@@ -57,7 +57,7 @@ export default function ProblemEditor({
                 Editing: {problem.id} · <Link 
                     href={`/problems/${problem.id}`} 
                     className={styles.link}>
-                        {problem.title}
+                    {problem.title}
                 </Link>
             </h1>
 

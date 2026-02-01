@@ -117,7 +117,7 @@ export default function TopBar() {
                                     role="tab"
                                     aria-selected={pathname === "/login"}
                                     className={`${styles.button} ${pathname === "/login" ? styles.active : ""
-                                        }`}
+                                    }`}
                                 >
                                     {t("nav.login")}
                                 </Link>
@@ -127,7 +127,7 @@ export default function TopBar() {
                                     role="tab"
                                     aria-selected={pathname === "/register"}
                                     className={`${styles.button} ${pathname === "/register" ? styles.active : ""
-                                        }`}
+                                    }`}
                                 >
                                     {t("nav.register")}
                                 </Link>

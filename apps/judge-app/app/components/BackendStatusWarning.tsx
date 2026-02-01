@@ -1,9 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { checkBackendStatus, BackendStatus } from "@/app/lib/backend-status";
 
 export function BackendStatusWarning() {
+    const { t } = useTranslation();
     const [status, setStatus] = useState<BackendStatus | null>(null);
     const [isChecking, setIsChecking] = useState(true);
 
@@ -28,10 +31,10 @@ export function BackendStatusWarning() {
     if (status.available) return null;
 
     return (
-        <div className="fixed top-0 left-0 right-0 z-50 bg-red-950 border-b-4 border-red-600 shadow-lg">
-            <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4 flex-1">
+        <div className="w-full bg-red-950 border-b-4 border-red-600 shadow-2xl z-30 relative">
+            <div className="w-full px-4 py-4 sm:px-6 lg:px-8">
+                <div className="flex items-center justify-between gap-4 flex-wrap">
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
                         <div className="flex-shrink-0">
                             <svg
                                 className="h-6 w-6 text-red-400 animate-pulse"
@@ -45,23 +48,29 @@ export function BackendStatusWarning() {
                                 />
                             </svg>
                         </div>
-                        <div className="flex-1">
-                            <h3 className="text-lg font-bold text-red-200">
-                                ⚠️ BACKEND SERVER UNAVAILABLE
+                        <div className="flex-1 min-w-0">
+                            <h3 className="text-base sm:text-lg font-bold text-red-200 truncate">
+                                ⚠️ {t("backendWarning.title")}
                             </h3>
-                            <p className="text-red-300 text-sm">
-                                {status.message} • Check <a href="/status" className="underline font-semibold hover:text-red-100">
-                                    /status
-                                </a> for details
+                            <p className="text-red-300 text-xs sm:text-sm break-words">
+                                {t("backendWarning.message")}
                             </p>
                         </div>
                     </div>
-                    <button
-                        onClick={() => setStatus(null)}
-                        className="text-red-400 hover:text-red-200 transition-colors"
-                    >
-                        ✕
-                    </button>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                        <Link
+                            href="/status"
+                            className="inline-flex items-center px-3 py-2 rounded-lg bg-red-900 hover:bg-red-800 text-red-100 text-xs sm:text-sm font-semibold transition-colors whitespace-nowrap"
+                        >
+                            {t("backendWarning.viewStatus")}
+                        </Link>
+                        <button
+                            onClick={() => setStatus(null)}
+                            className="text-red-400 hover:text-red-200 transition-colors flex-shrink-0 p-1"
+                        >
+                            ✕
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,6 +1,7 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
+import stylistic from "@stylistic/eslint-plugin";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -24,6 +25,10 @@ const eslintConfig = defineConfig([
           allowTemplateLiterals: true,
         },
       ],
+      '@stylistic/indent': ['error', 4],
+    },
+    plugins: {
+      '@stylistic': stylistic
     },
   },
 ]);

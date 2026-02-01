@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { checkBackendStatus } from "@/app/lib/backend-status";
 import { checkOllamaHealth } from "@/app/lib/backendServer";
 
@@ -13,9 +14,10 @@ interface ServiceStatus {
 }
 
 export default function StatusPage() {
+    const { t } = useTranslation();
     const [services, setServices] = useState<ServiceStatus[]>([
-        { name: "Backend Server", status: "checking", message: "Checking..." },
-        { name: "Ollama AI Server", status: "checking", message: "Checking..." },
+        { name: t("status.backendServer"), status: "checking", message: t("status.checking") },
+        { name: t("status.ollamaAiServer"), status: "checking", message: t("status.checking") },
     ]);
     const [lastCheck, setLastCheck] = useState<Date>(new Date());
 
@@ -25,7 +27,7 @@ export default function StatusPage() {
         // Check backend
         const backendStatus = await checkBackendStatus();
         newServices.push({
-            name: "Backend Server",
+            name: t("status.backendServer"),
             status: backendStatus.available ? "online" : "offline",
             message: backendStatus.message,
             timestamp: backendStatus.timestamp,
@@ -34,7 +36,7 @@ export default function StatusPage() {
         // Check Ollama
         const ollamaResponse = await checkOllamaHealth();
         newServices.push({
-            name: "Ollama AI Server",
+            name: t("status.ollamaAiServer"),
             status: ollamaResponse.data?.available ? "online" : "offline",
             message: ollamaResponse.data ? 
                 `${ollamaResponse.data.model} ready` : 
@@ -53,6 +55,25 @@ export default function StatusPage() {
     }, []);
 
     const allOnline = services.every(s => s.status === "online");
+    const getStatusLabel = (status: string) => {
+        switch(status) {
+            case "online": return t("status.online");
+            case "offline": return t("status.offline");
+            case "checking": return t("status.checking");
+            default: return status;
+        }
+    };
+
+    const formatTime = (date: Date) => {
+        const now = new Date();
+        const diffMs = now.getTime() - date.getTime();
+        const diffSecs = Math.floor(diffMs / 1000);
+        
+        if (diffSecs < 5) return t("status.just_now");
+        if (diffSecs < 60) return `${diffSecs}s ago`;
+        if (diffSecs < 3600) return `${Math.floor(diffSecs / 60)}m ago`;
+        return date.toLocaleTimeString();
+    };
 
     return (
         <main className="min-h-screen bg-gradient-to-b from-black via-slate-900 to-black">
@@ -60,10 +81,10 @@ export default function StatusPage() {
                 {/* Header */}
                 <div className="mb-8">
                     <Link href="/" className="text-blue-400 hover:text-blue-300 mb-4 inline-flex items-center gap-2">
-                        ← Back to Home
+                        ← {t("common.back")}
                     </Link>
-                    <h1 className="text-4xl font-bold text-white mb-2">System Status</h1>
-                    <p className="text-gray-400">Real-time health monitoring of all services</p>
+                    <h1 className="text-4xl font-bold text-white mb-2">{t("status.title")}</h1>
+                    <p className="text-gray-400">{t("status.subtitle")}</p>
                 </div>
 
                 {/* Overall Status Banner */}
@@ -79,11 +100,11 @@ export default function StatusPage() {
                         <h2 className={`text-2xl font-bold ${
                             allOnline ? "text-green-300" : "text-red-300"
                         }`}>
-                            {allOnline ? "✓ All Systems Operational" : "⚠ Some Services Offline"}
+                            {allOnline ? "✓ " + t("status.serviceHealth") : "⚠ " + t("status.serviceHealth")}
                         </h2>
                     </div>
                     <p className="text-gray-400 text-sm">
-                        Last checked: {lastCheck.toLocaleTimeString()}
+                        {t("status.lastChecked")}: {lastCheck.toLocaleTimeString()}
                     </p>
                 </div>
 
@@ -96,8 +117,8 @@ export default function StatusPage() {
                                 service.status === "online"
                                     ? "bg-green-950/20 border-green-600"
                                     : service.status === "offline"
-                                    ? "bg-red-950/20 border-red-600"
-                                    : "bg-yellow-950/20 border-yellow-600"
+                                        ? "bg-red-950/20 border-red-600"
+                                        : "bg-yellow-950/20 border-yellow-600"
                             }`}
                         >
                             <div className="flex items-center justify-between mb-2">
@@ -107,24 +128,24 @@ export default function StatusPage() {
                                         service.status === "online"
                                             ? "bg-green-400"
                                             : service.status === "offline"
-                                            ? "bg-red-400"
-                                            : "bg-yellow-400"
+                                                ? "bg-red-400"
+                                                : "bg-yellow-400"
                                     } ${service.status === "checking" ? "animate-pulse" : ""}`} />
                                     <span className={`font-semibold uppercase text-sm ${
                                         service.status === "online"
                                             ? "text-green-300"
                                             : service.status === "offline"
-                                            ? "text-red-300"
-                                            : "text-yellow-300"
+                                                ? "text-red-300"
+                                                : "text-yellow-300"
                                     }`}>
-                                        {service.status}
+                                        {getStatusLabel(service.status)}
                                     </span>
                                 </div>
                             </div>
                             <p className="text-gray-300">{service.message}</p>
                             {service.timestamp && (
                                 <p className="text-gray-500 text-xs mt-2">
-                                    Checked at: {service.timestamp.toLocaleTimeString()}
+                                    {t("status.lastChecked")}: {formatTime(service.timestamp)}
                                 </p>
                             )}
                         </div>
@@ -133,26 +154,36 @@ export default function StatusPage() {
 
                 {/* Troubleshooting Guide */}
                 <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-6">
-                    <h3 className="text-lg font-semibold text-white mb-4">Troubleshooting</h3>
+                    <h3 className="text-lg font-semibold text-white mb-4">{t("status.troubleshooting")}</h3>
                     
                     <div className="space-y-4">
                         <div>
-                            <h4 className="font-semibold text-red-300 mb-2">Backend Server Offline?</h4>
+                            <h4 className="font-semibold text-red-300 mb-2">{t("status.backendsOffline")}</h4>
                             <ul className="text-gray-300 text-sm space-y-1 ml-4">
-                                <li>✓ Make sure the backend server is running on port 3001</li>
-                                <li>✓ Check that DATABASE_URL is configured correctly</li>
-                                <li>✓ Ensure all environment variables are set in .env</li>
-                                <li>✓ Check backend logs for errors</li>
+                                <li>✓ {t("status.backendOfflineStep1")}</li>
+                                <li>✓ {t("status.backendOfflineStep2")}</li>
+                                <li>✓ {t("status.backendOfflineStep3")}</li>
+                                <li>✓ {t("status.backendOfflineStep4")}</li>
                             </ul>
                         </div>
 
                         <div>
-                            <h4 className="font-semibold text-red-300 mb-2">Ollama Offline?</h4>
+                            <h4 className="font-semibold text-red-300 mb-2">{t("status.ollamaOffline")}</h4>
                             <ul className="text-gray-300 text-sm space-y-1 ml-4">
-                                <li>✓ Start Ollama: <code className="bg-black px-2 py-1 rounded">ollama serve</code></li>
-                                <li>✓ Verify Ollama is running on <code className="bg-black px-2 py-1 rounded">http://localhost:11434</code></li>
-                                <li>✓ Pull the model: <code className="bg-black px-2 py-1 rounded">ollama pull qwen2.5-coder:3b</code></li>
-                                <li>✓ Check OLLAMA_URL in backend .env</li>
+                                <li>✓ {t("status.ollamaOfflineStep1")}</li>
+                                <li>✓ {t("status.ollamaOfflineStep2")}</li>
+                                <li>✓ {t("status.ollamaOfflineStep3")}</li>
+                                <li>✓ {t("status.ollamaOfflineStep4")}</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 className="font-semibold text-red-300 mb-2">{t("status.generalTroubleshooting")}</h4>
+                            <ul className="text-gray-300 text-sm space-y-1 ml-4">
+                                <li>✓ {t("status.generalTroubleshootingStep1")}</li>
+                                <li>✓ {t("status.generalTroubleshootingStep2")}</li>
+                                <li>✓ {t("status.generalTroubleshootingStep3")}</li>
+                                <li>✓ {t("status.generalTroubleshootingStep4")}</li>
                             </ul>
                         </div>
                     </div>
@@ -160,7 +191,7 @@ export default function StatusPage() {
 
                 {/* Auto-Refresh Info */}
                 <div className="mt-8 text-center text-gray-500 text-sm">
-                    <p>This page automatically refreshes every 10 seconds</p>
+                    <p>{t("status.autoRefresh")}</p>
                 </div>
             </div>
         </main>

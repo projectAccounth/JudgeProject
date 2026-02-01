@@ -751,5 +751,40 @@
     "backToList": "Zurück zu Wettbewerben",
     "status": "Status",
     "time": "Zeit"
+  },
+  "status": {
+    "title": "Systemstatus",
+    "subtitle": "Überwachen Sie die Gesundheit der Backend-Dienste",
+    "serviceHealth": "Dienststatus",
+    "backendServer": "Backend-Server",
+    "ollamaAiServer": "Ollama-KI-Server",
+    "online": "Online",
+    "offline": "Offline",
+    "checking": "Wird überprüft...",
+    "lastChecked": "Zuletzt überprüft",
+    "just_now": "gerade eben",
+    "autoRefresh": "Automatische Aktualisierung alle 10 Sekunden",
+    "troubleshooting": "Fehlerbehebungsanleitung",
+    "backendsOffline": "Wenn der Backend-Server offline ist:",
+    "backendOfflineStep1": "Überprüfen Sie, ob der Backend-Server auf Ihrem Computer ausgeführt wird",
+    "backendOfflineStep2": "Überprüfen Sie, ob die Umgebungsvariable NEXT_PUBLIC_BACKEND_URL korrekt festgelegt ist",
+    "backendOfflineStep3": "Stellen Sie sicher, dass das Backend unter der konfigurierten URL erreichbar ist",
+    "backendOfflineStep4": "Überprüfen Sie die Backend-Logs auf Fehler",
+    "ollamaOffline": "Wenn der Ollama-KI-Server offline ist:",
+    "ollamaOfflineStep1": "Stellen Sie sicher, dass Ollama auf Ihrem System installiert ist",
+    "ollamaOfflineStep2": "Starten Sie Ollama mit: ollama serve",
+    "ollamaOfflineStep3": "Überprüfen Sie, ob OLLAMA_URL in backend .env korrekt festgelegt ist (Standard: http://localhost:11434)",
+    "ollamaOfflineStep4": "Stellen Sie sicher, dass ein Modell heruntergeladen ist: ollama pull qwen2.5-coder:3b",
+    "generalTroubleshooting": "Allgemeine Fehlerbehebung:",
+    "generalTroubleshootingStep1": "Versuchen Sie, die Seite zu aktualisieren, um den Dienststatus erneut zu überprüfen",
+    "generalTroubleshootingStep2": "Löschen Sie Ihren Browser-Cache und Cookies",
+    "generalTroubleshootingStep3": "Überprüfen Sie Ihre Internetverbindung",
+    "generalTroubleshootingStep4": "Lesen Sie die Backend- und Ollama-Logs für detaillierte Fehlermeldungen"
+  },
+  "backendWarning": {
+    "title": "BACKEND-SERVER NICHT VERFÜGBAR",
+    "message": "Der Backend-Server ist derzeit nicht verfügbar. Einige Funktionen funktionieren möglicherweise nicht ordnungsgemäß.",
+    "viewStatus": "Status anzeigen",
+    "close": "Schließen"
   }
 }

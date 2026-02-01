@@ -19,7 +19,7 @@ export async function testOllamaConnection() {
     console.log("Health response:", healthResponse);
 
     if (!healthResponse.data?.available) {
-        console.error("❌ Ollama server not available");
+        console.error("Ollama server not available");
         return false;
     }
 
@@ -42,11 +42,11 @@ export async function testOllamaConnection() {
     console.log("Analysis response:", analysisResponse);
     
     if (analysisResponse.error) {
-        console.error("❌ Analysis failed:", analysisResponse.error);
+        console.error("Analysis failed:", analysisResponse.error);
         return false;
     }
 
-    console.log("✅ All tests passed!");
+    console.log("All tests passed!");
     console.log("Response data:", analysisResponse.data);
     return true;
 }

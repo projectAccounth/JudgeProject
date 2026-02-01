@@ -19,14 +19,14 @@ export default function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <body suppressHydrationWarning>
-                    <AuthProvider>
-                        <I18nProvider>
-                            <BackendStatusWarning />
-                            <TopBar />
-                            {children}
-                            <Footer />
-                        </I18nProvider>
-                    </AuthProvider>
+                <AuthProvider>
+                    <I18nProvider>
+                        <TopBar />
+                        <BackendStatusWarning />
+                        {children}
+                        <Footer />
+                    </I18nProvider>
+                </AuthProvider>
             </body>
         </html>
     );

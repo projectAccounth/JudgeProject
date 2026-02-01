@@ -17,7 +17,7 @@ export default function SubmissionsClient({ nextCursor }: Readonly<SubmissionsCl
 
     return (
         <div className={styles.paginationContainer}>
-                <Link href={`/submissions?cursor=${encodeURIComponent(nextCursor)}`} className={styles.loadMoreBtn}>
+            <Link href={`/submissions?cursor=${encodeURIComponent(nextCursor)}`} className={styles.loadMoreBtn}>
                 {t("load_more")}
             </Link>
         </div>

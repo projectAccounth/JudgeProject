@@ -7,23 +7,23 @@ const OLLAMA_BASE_URL = process.env.NEXT_PUBLIC_OLLAMA_URL || "http://localhost:
 const OLLAMA_MODEL = process.env.NEXT_PUBLIC_OLLAMA_MODEL || "llama2";
 
 interface OllamaRequest {
-  model: string;
-  prompt: string;
-  stream: false;
+    model: string;
+    prompt: string;
+    stream: false;
 }
 
 interface OllamaResponse {
-  model: string;
-  created_at: string;
-  response: string;
-  done: boolean;
-  context?: number[];
-  total_duration?: number;
-  load_duration?: number;
-  prompt_eval_count?: number;
-  prompt_eval_duration?: number;
-  eval_count?: number;
-  eval_duration?: number;
+    model: string;
+    created_at: string;
+    response: string;
+    done: boolean;
+    context?: number[];
+    total_duration?: number;
+    load_duration?: number;
+    prompt_eval_count?: number;
+    prompt_eval_duration?: number;
+    eval_count?: number;
+    eval_duration?: number;
 }
 
 /**
@@ -34,63 +34,63 @@ interface OllamaResponse {
  * @returns Translated text or original text if translation fails
  */
 export async function translateWithOllama(
-  text: string,
-  targetLanguage: string,
-  sourceLanguage: string = "en"
+    text: string,
+    targetLanguage: string,
+    sourceLanguage: string = "en"
 ): Promise<string> {
-  if (!text) return text;
-  if (sourceLanguage === targetLanguage) return text;
+    if (!text) return text;
+    if (sourceLanguage === targetLanguage) return text;
 
-  try {
-    const languageNames: Record<string, string> = {
-      en: "English",
-      fr: "French",
-      de: "German",
-      cn: "Chinese",
-      vi: "Vietnamese",
-    };
+    try {
+        const languageNames: Record<string, string> = {
+            en: "English",
+            fr: "French",
+            de: "German",
+            cn: "Chinese",
+            vi: "Vietnamese",
+        };
 
-    const sourceLang = languageNames[sourceLanguage] || sourceLanguage;
-    const targetLang = languageNames[targetLanguage] || targetLanguage;
+        const sourceLang = languageNames[sourceLanguage] || sourceLanguage;
+        const targetLang = languageNames[targetLanguage] || targetLanguage;
 
-    const prompt = `Translate the following text from ${sourceLang} to ${targetLang}. 
+        const prompt = `Translate the following text from ${sourceLang} to ${targetLang}. 
 Respond with ONLY the translated text, nothing else. Adjust it to be suitable with the context.
 
 Text to translate: "${text}"
 
 Translated text:`;
 
-    const response = await fetch(`${OLLAMA_BASE_URL}/api/generate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: OLLAMA_MODEL,
-        prompt: prompt,
-        stream: false,
-      } as OllamaRequest),
-    });
+        const response = await fetch(`${OLLAMA_BASE_URL}/api/generate`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                model: OLLAMA_MODEL,
+                prompt: prompt,
+                stream: false,
+            } as OllamaRequest),
+        });
 
-    if (!response.ok) {
-      console.error(
-        `Ollama API error: ${response.status} ${response.statusText}`
-      );
-      return text;
+        if (!response.ok) {
+            console.error(
+                `Ollama API error: ${response.status} ${response.statusText}`
+            );
+            return text;
+        }
+
+        const data = (await response.json()) as OllamaResponse;
+        const translatedText = data.response?.trim() || text;
+
+        // Remove common extra text that models might add
+        return translatedText
+            .replace(/^["']|["']$/g, "") // Remove surrounding quotes
+            .replace(/\.{3}$/, "") // Remove trailing ellipsis
+            .trim();
+    } catch (error) {
+        console.error("Ollama translation failed:", error);
+        return text; // Fallback to original text on error
     }
-
-    const data = (await response.json()) as OllamaResponse;
-    const translatedText = data.response?.trim() || text;
-
-    // Remove common extra text that models might add
-    return translatedText
-      .replace(/^["']|["']$/g, "") // Remove surrounding quotes
-      .replace(/\.{3}$/, "") // Remove trailing ellipsis
-      .trim();
-  } catch (error) {
-    console.error("Ollama translation failed:", error);
-    return text; // Fallback to original text on error
-  }
 }
 
 /**
@@ -101,15 +101,15 @@ Translated text:`;
  * @returns Array of translated texts
  */
 export async function batchTranslateWithOllama(
-  texts: string[],
-  targetLanguage: string,
-  sourceLanguage: string = "en"
+    texts: string[],
+    targetLanguage: string,
+    sourceLanguage: string = "en"
 ): Promise<string[]> {
-  return Promise.all(
-    texts.map((text) =>
-      translateWithOllama(text, targetLanguage, sourceLanguage)
-    )
-  );
+    return Promise.all(
+        texts.map((text) =>
+            translateWithOllama(text, targetLanguage, sourceLanguage)
+        )
+    );
 }
 
 /**
@@ -117,34 +117,34 @@ export async function batchTranslateWithOllama(
  * @returns true if server is reachable, false otherwise
  */
 export async function isOllamaAvailable(): Promise<boolean> {
-  try {
-    const response = await fetch(`${OLLAMA_BASE_URL}/api/tags`, {
-      method: "GET",
-    });
-    return response.ok;
-  } catch (error) {
-    console.warn("Ollama server not available:", error);
-    return false;
-  }
+    try {
+        const response = await fetch(`${OLLAMA_BASE_URL}/api/tags`, {
+            method: "GET",
+        });
+        return response.ok;
+    } catch (error) {
+        console.warn("Ollama server not available:", error);
+        return false;
+    }
 }
 
 /**
  * Get list of available models on the Ollama server
  */
 export async function getAvailableModels(): Promise<string[]> {
-  try {
-    const response = await fetch(`${OLLAMA_BASE_URL}/api/tags`, {
-      method: "GET",
-    });
+    try {
+        const response = await fetch(`${OLLAMA_BASE_URL}/api/tags`, {
+            method: "GET",
+        });
 
-    if (!response.ok) {
-      return [];
+        if (!response.ok) {
+            return [];
+        }
+
+        const data = await response.json() as { models?: Array<{ name: string }> };
+        return data.models?.map((m) => m.name) || [];
+    } catch (error) {
+        console.error("Failed to fetch Ollama models:", error);
+        return [];
     }
-
-    const data = await response.json() as { models?: Array<{ name: string }> };
-    return data.models?.map((m) => m.name) || [];
-  } catch (error) {
-    console.error("Failed to fetch Ollama models:", error);
-    return [];
-  }
 }

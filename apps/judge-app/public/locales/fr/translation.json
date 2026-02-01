@@ -751,5 +751,40 @@
     "backToList": "Retour aux Concours",
     "status": "Statut",
     "time": "Heure"
+  },
+  "status": {
+    "title": "État du Système",
+    "subtitle": "Surveiller la santé des services backend",
+    "serviceHealth": "Santé du Service",
+    "backendServer": "Serveur Backend",
+    "ollamaAiServer": "Serveur IA Ollama",
+    "online": "En ligne",
+    "offline": "Hors ligne",
+    "checking": "Vérification...",
+    "lastChecked": "Dernière vérification",
+    "just_now": "à l'instant",
+    "autoRefresh": "Actualisation automatique toutes les 10 secondes",
+    "troubleshooting": "Guide de Dépannage",
+    "backendsOffline": "Si le serveur Backend est hors ligne :",
+    "backendOfflineStep1": "Vérifiez que le serveur backend s'exécute sur votre machine",
+    "backendOfflineStep2": "Vérifiez que la variable d'environnement NEXT_PUBLIC_BACKEND_URL est définie correctement",
+    "backendOfflineStep3": "Assurez-vous que le backend est accessible à l'URL configurée",
+    "backendOfflineStep4": "Vérifiez les journaux backend pour les erreurs",
+    "ollamaOffline": "Si le serveur IA Ollama est hors ligne :",
+    "ollamaOfflineStep1": "Assurez-vous que Ollama est installé sur votre système",
+    "ollamaOfflineStep2": "Démarrez Ollama avec : ollama serve",
+    "ollamaOfflineStep3": "Vérifiez que OLLAMA_URL est défini correctement dans backend .env (par défaut : http://localhost:11434)",
+    "ollamaOfflineStep4": "Assurez-vous qu'un modèle est téléchargé : ollama pull qwen2.5-coder:3b",
+    "generalTroubleshooting": "Dépannage Général :",
+    "generalTroubleshootingStep1": "Essayez d'actualiser la page pour revérifier l'état du service",
+    "generalTroubleshootingStep2": "Effacez le cache de votre navigateur et les cookies",
+    "generalTroubleshootingStep3": "Vérifiez votre connexion Internet",
+    "generalTroubleshootingStep4": "Consultez les journaux backend et Ollama pour des messages d'erreur détaillés"
+  },
+  "backendWarning": {
+    "title": "SERVEUR BACKEND INDISPONIBLE",
+    "message": "Le serveur backend est actuellement indisponible. Certaines fonctionnalités peuvent ne pas fonctionner correctement.",
+    "viewStatus": "Voir l'État",
+    "close": "Fermer"
   }
 }

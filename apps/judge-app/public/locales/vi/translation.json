@@ -752,6 +752,41 @@
     "status": "Trạng thái",
     "time": "Thời gian"
   },
+  "status": {
+    "title": "Trạng thái Hệ thống",
+    "subtitle": "Theo dõi tình trạng của các dịch vụ backend",
+    "serviceHealth": "Trạng thái Dịch vụ",
+    "backendServer": "Máy chủ Backend",
+    "ollamaAiServer": "Máy chủ AI Ollama",
+    "online": "Trực tuyến",
+    "offline": "Ngoại tuyến",
+    "checking": "Đang kiểm tra...",
+    "lastChecked": "Kiểm tra lần cuối",
+    "just_now": "vừa xong",
+    "autoRefresh": "Tự động làm mới mỗi 10 giây",
+    "troubleshooting": "Hướng dẫn Khắc phục sự cố",
+    "backendsOffline": "Nếu Máy chủ Backend ngoại tuyến:",
+    "backendOfflineStep1": "Kiểm tra xem máy chủ backend có đang chạy trên máy tính của bạn không",
+    "backendOfflineStep2": "Xác minh rằng biến môi trường NEXT_PUBLIC_BACKEND_URL được đặt chính xác",
+    "backendOfflineStep3": "Đảm bảo backend có thể truy cập được tại URL được cấu hình",
+    "backendOfflineStep4": "Kiểm tra các bản ghi backend để tìm lỗi",
+    "ollamaOffline": "Nếu Máy chủ AI Ollama ngoại tuyến:",
+    "ollamaOfflineStep1": "Đảm bảo Ollama đã được cài đặt trên hệ thống của bạn",
+    "ollamaOfflineStep2": "Bắt đầu Ollama với: ollama serve",
+    "ollamaOfflineStep3": "Xác minh rằng OLLAMA_URL được đặt chính xác trong backend .env (mặc định: http://localhost:11434)",
+    "ollamaOfflineStep4": "Đảm bảo một mô hình đã được tải xuống: ollama pull qwen2.5-coder:3b",
+    "generalTroubleshooting": "Khắc phục sự cố chung:",
+    "generalTroubleshootingStep1": "Thử làm mới trang để kiểm tra lại trạng thái dịch vụ",
+    "generalTroubleshootingStep2": "Xóa bộ nhớ cache trình duyệt và cookie của bạn",
+    "generalTroubleshootingStep3": "Kiểm tra kết nối internet của bạn",
+    "generalTroubleshootingStep4": "Xem các bản ghi backend và Ollama để biết thêm chi tiết về thông báo lỗi"
+  },
+  "backendWarning": {
+    "title": "MÁY CHỦ BACKEND KHÔNG KHẢ DỤNG",
+    "message": "Máy chủ backend hiện không khả dụng. Một số tính năng có thể không hoạt động đúng cách.",
+    "viewStatus": "Xem Trạng thái",
+    "close": "Đóng"
+  },
   "analysis": {
 
   }

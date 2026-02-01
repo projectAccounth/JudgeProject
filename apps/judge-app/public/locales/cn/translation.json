@@ -751,5 +751,40 @@
     "backToList": "返回竞赛",
     "status": "状态",
     "time": "时间"
+  },
+  "status": {
+    "title": "系统状态",
+    "subtitle": "监控后端服务的健康状况",
+    "serviceHealth": "服务健康",
+    "backendServer": "后端服务器",
+    "ollamaAiServer": "Ollama AI服务器",
+    "online": "在线",
+    "offline": "离线",
+    "checking": "检查中...",
+    "lastChecked": "最后检查",
+    "just_now": "刚刚",
+    "autoRefresh": "每10秒自动刷新一次",
+    "troubleshooting": "故障排除指南",
+    "backendsOffline": "如果后端服务器离线:",
+    "backendOfflineStep1": "检查您计算机上的后端服务器是否运行",
+    "backendOfflineStep2": "验证NEXT_PUBLIC_BACKEND_URL环境变量是否正确设置",
+    "backendOfflineStep3": "确保后端可在配置的URL处访问",
+    "backendOfflineStep4": "检查后端日志中的错误",
+    "ollamaOffline": "如果Ollama AI服务器离线:",
+    "ollamaOfflineStep1": "确保Ollama已安装在您的系统上",
+    "ollamaOfflineStep2": "使用以下命令启动Ollama: ollama serve",
+    "ollamaOfflineStep3": "验证后端.env中的OLLAMA_URL设置正确(默认: http://localhost:11434)",
+    "ollamaOfflineStep4": "确保已下载模型: ollama pull qwen2.5-coder:3b",
+    "generalTroubleshooting": "常见故障排除:",
+    "generalTroubleshootingStep1": "尝试刷新页面以重新检查服务状态",
+    "generalTroubleshootingStep2": "清除浏览器缓存和Cookie",
+    "generalTroubleshootingStep3": "检查您的互联网连接",
+    "generalTroubleshootingStep4": "查看后端和Ollama日志以获取详细的错误消息"
+  },
+  "backendWarning": {
+    "title": "后端服务器不可用",
+    "message": "后端服务器当前不可用。某些功能可能无法正常工作。",
+    "viewStatus": "查看状态",
+    "close": "关闭"
   }
 }

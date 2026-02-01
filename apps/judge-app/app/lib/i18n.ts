@@ -7,25 +7,25 @@ import cnTranslation from "../../public/locales/cn/translation.json";
 import viTranslation from "../../public/locales/vi/translation.json";
 
 const resources = {
-  en: { translation: enTranslation },
-  fr: { translation: frTranslation },
-  de: { translation: deTranslation },
-  cn: { translation: cnTranslation },
-  vi: { translation: viTranslation },
+    en: { translation: enTranslation },
+    fr: { translation: frTranslation },
+    de: { translation: deTranslation },
+    cn: { translation: cnTranslation },
+    vi: { translation: viTranslation },
 };
 
 i18n
-  .use(LanguageDetector)
-  .init({
-    resources,
-    fallbackLng: "en",
-    interpolation: {
-      escapeValue: false,
-    },
-    detection: {
-      order: ["localStorage", "navigator"],
-      caches: ["localStorage"],
-    },
-  });
+    .use(LanguageDetector)
+    .init({
+        resources,
+        fallbackLng: "en",
+        interpolation: {
+            escapeValue: false,
+        },
+        detection: {
+            order: ["localStorage", "navigator"],
+            caches: ["localStorage"],
+        },
+    });
 
 export default i18n;
