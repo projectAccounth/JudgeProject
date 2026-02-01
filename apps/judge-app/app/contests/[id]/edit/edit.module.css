@@ -1,0 +1,226 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #0f1117;
+    min-height: 100vh;
+    color: #e6e8ee;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #2d3748;
+    padding-bottom: 1rem;
+}
+
+.header h1 {
+    margin: 0.5rem 0 0 0;
+    font-size: 1.8rem;
+    color: #f1f3f8;
+}
+
+.backLink {
+    display: inline-block;
+    color: #60a5fa;
+    text-decoration: none;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+}
+
+.backLink:hover {
+    color: #93c5fd;
+}
+
+.error {
+    background-color: #5f1f1f;
+    color: #ff6b6b;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid #ff6b6b;
+}
+
+.sections {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.section {
+    background: #1a1f2e;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #2d3748;
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.sectionHeader h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    color: #f1f3f8;
+}
+
+.addBtn {
+    padding: 0.75rem 1.5rem;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.addBtn:hover:not(:disabled) {
+    background-color: #0052a3;
+}
+
+.addBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.pickerSection {
+    background: #141820;
+    border: 1px solid #2d3748;
+    border-radius: 6px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.empty {
+    text-align: center;
+    color: #9aa4b2;
+    padding: 2rem;
+    background: #141820;
+    border-radius: 4px;
+    border: 1px dashed #2d3748;
+}
+
+.problemsList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.problemItem {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #141820;
+    border: 1px solid #2d3748;
+    border-radius: 4px;
+    transition: box-shadow 0.2s;
+}
+
+.problemItem:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    border-color: #0066cc;
+}
+
+.dragHandle {
+    color: #5d6c7f;
+    cursor: grab;
+    font-weight: bold;
+    font-size: 0.8rem;
+    user-select: none;
+}
+
+.dragHandle:active {
+    cursor: grabbing;
+}
+
+.problemInfo {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #e6e8ee;
+}
+
+.position {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    background-color: #0066cc;
+    color: white;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.title {
+    color: #e6e8ee;
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btnSmall {
+    padding: 0.5rem 0.75rem;
+    background-color: #2d3748;
+    color: #e6e8ee;
+    border: 1px solid #3f4654;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.btnSmall:hover:not(:disabled) {
+    background-color: #3f4654;
+    border-color: #5d6c7f;
+}
+
+.btnSmall:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btnDanger {
+    background-color: #5f1f1f;
+    border-color: #7f2f2f;
+    color: #ff6b6b;
+}
+
+.btnDanger:hover:not(:disabled) {
+    background-color: #7f2f2f;
+    border-color: #9f3f3f;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .problemItem {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .problemInfo {
+        width: 100%;
+    }
+
+    .actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}

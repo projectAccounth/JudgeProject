@@ -1,6 +1,6 @@
-import { Judge, JudgeTestCase } from "../domain/judge";
-import { SubmissionRepository } from "../domain/submission";
-import { TestCase } from "../domain/testcase";
+import { Judge, JudgeTestCase } from "@judgeapp/shared/domain/judge";
+import { SubmissionRepository } from "@judgeapp/shared/domain/submission";
+import { TestCase } from "@judgeapp/shared/domain/testcase";
 import { ProblemRepository } from "../repositories/problem.repository";
 import { TestCaseRepository } from "../repositories/testcase.repository";
 

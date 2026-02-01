@@ -1,5 +1,5 @@
 import { db } from "../../database/sql";
-import { Submission, SubmissionRepository } from "../../domain/submission";
+import { Submission, SubmissionRepository, SubmissionStats } from "@judgeapp/shared/domain/submission";
 
 export class SqlSubmissionRepository
     implements SubmissionRepository
@@ -123,6 +123,10 @@ export class SqlSubmissionRepository
         );
     }
 
+    /**
+     * Finds submissions stuck running.
+     * @returns A list of invalid submissions.
+     */
     async findStuckRunning(timeoutMs: number): Promise<Submission[]> {
         const res = await db.query(
             `
@@ -137,6 +141,10 @@ export class SqlSubmissionRepository
         return res.rows.map(mapSubmission);
     }
 
+    /**
+     * Finds failed submissions.
+     * @returns A list of failed submissions.
+     */
     async findFailed(): Promise<Submission[]> {
         const res = await db.query(
             `
@@ -149,6 +157,11 @@ export class SqlSubmissionRepository
         return res.rows.map(mapSubmission);
     }
 
+    /**
+     * Recovers a batch of invalid submissions (either failed or stuck at RUNNING)
+     * @param timeoutMs The requirement (submission must exists longer than this)
+     * @returns A list of recovered submissions.
+     */
     async recoverInvalid(timeoutMs: number): Promise<Submission[]> {
         const res = await db.query(
             `
@@ -171,6 +184,10 @@ export class SqlSubmissionRepository
     }
 
 
+    /**
+     * Resets a submission back to PENDING (mostly for rerunning)
+     * @param id The submission ID.
+     */
     async resetToPending(id: string): Promise<void> {
         await db.query(
             `
@@ -184,6 +201,10 @@ export class SqlSubmissionRepository
         );
     }
 
+    /**
+     * Deletes a submission from the database.
+     * @param id The submission ID to delete.
+     */
     async delete(id: string): Promise<void> {
         const res = await db.query(
             `DELETE FROM submissions WHERE id = $1`,
@@ -197,7 +218,8 @@ export class SqlSubmissionRepository
 
     /**
      * Deletes all submissions for a problem.
-     * Returns number of deleted rows.
+     * @param problemId The problem ID.
+     * @returns number of deleted rows.
      */
     async deleteByProblem(problemId: string): Promise<number> {
         const res = await db.query(
@@ -206,6 +228,108 @@ export class SqlSubmissionRepository
         );
 
         return res.rowCount ?? 0;
+    }
+
+    async getSubmissionStats(problemId?: string): Promise<SubmissionStats> {
+        let query;
+
+        if (problemId) {
+            query = 
+            `
+                
+            `
+        }
+        else {
+            query =
+            `
+                
+            `
+        }
+
+        return null as any;
+    }
+
+    async countRecentByUser(userId: string, windowMs: number): Promise<number> {
+        const res = await db.query(
+            `
+            SELECT COUNT(*) as cnt
+            FROM submissions
+            WHERE user_id = $1
+            AND created_at > NOW() - ($2 * INTERVAL '1 millisecond')
+            `,
+            [userId, windowMs]
+        );
+
+        return Number(res.rows[0]?.cnt ?? 0);
+    }
+
+    async getQueueStats() {
+        const res = await db.query(`
+            SELECT
+                COUNT(*) FILTER (WHERE status = 'PENDING') AS pending,
+                COUNT(*) FILTER (WHERE status = 'RUNNING') AS running,
+                COUNT(*) FILTER (WHERE status = 'FAILED') AS failed
+            FROM submissions
+        `);
+
+        return res.rows[0];
+    }
+
+    async getOldestPending(): Promise<number | null> {
+        const res = await db.query(`
+            SELECT EXTRACT(EPOCH FROM (NOW() - created_at)) * 1000 AS age
+            FROM submissions
+            WHERE status = 'PENDING'
+            ORDER BY created_at ASC
+            LIMIT 1
+        `);
+
+        return res.rowCount ? Number(res.rows[0].age) : null;
+    }
+
+    async getAvgRuntime(): Promise<number | null> {
+        const res = await db.query(`
+            SELECT AVG(EXTRACT(EPOCH FROM (finished_at - started_at)) * 1000) AS avg
+            FROM submissions
+            WHERE status = 'DONE'
+            AND finished_at > NOW() - INTERVAL '1 hour'
+        `);
+
+        return res.rows[0].avg ?? null;
+    }
+
+    /**
+     * Gets a page of submissions.
+     * @param limit The count of submissions in the given page
+     * @param after The time to get the page after.
+     * @returns An array, with the submissions list and the cursor for the next page.
+     */
+    async getPaginated(limit: number, after?: Date): Promise<{
+        submissions: Submission[];
+        nextCursor: Date | null;
+    }> {
+        const params: any[] = [limit];
+        let query = `
+              SELECT * FROM submissions
+            WHERE ($2::timestamp IS NULL OR created_at < $2)
+            ORDER BY created_at DESC
+            LIMIT $1
+        `;
+
+        if (after) {
+            params.push(after);
+        } else {
+            params.push(null);
+        }
+
+        const res = await db.query(query, params);
+        const submissions = res.rows.map(mapSubmission);
+
+        // cursor is the createdAt of the last item in this page
+        const nextCursor =
+            submissions.length > 0 ? submissions[submissions.length - 1].createdAt : null;
+
+        return { submissions, nextCursor };
     }
 }
 

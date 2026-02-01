@@ -1,7 +1,7 @@
-import { User } from "../../domain/user";
+import { AuthUser } from "../../domain/user";
 
 export interface AuthenticatedRequest extends Request {
     cookies: any;
-    user?: User;
+    user?: AuthUser;
     sessionId?: string;
 }

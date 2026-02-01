@@ -8,8 +8,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "noImplicitAny": true,
-    "outDir": "./dist",
-    "rootDir": "./src"
+    "paths": {
+      "@judgeapp/shared": ["../../packages/shared/src"],
+      "@judgeapp/shared/*": ["../../packages/shared/src/*"]
+    }
   },
-  "include": ["./src/**/*.ts", "worker.js", "src/worker.js"]
+  "include": ["./src/**/*.ts", "worker.js", "src/worker.js", "src/schemas/.schema.ts"]
 }

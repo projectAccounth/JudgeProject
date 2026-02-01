@@ -1,17 +1,39 @@
-import { User } from "../domain/user";
+import { FastifyReply, FastifyRequest } from "fastify";
+import { AuthUser, UserRole } from "../domain/user";
+import { z } from "zod";
 
-export interface AppRoute<TBody = unknown, TParams = unknown> {
-    method: "GET" | "POST" | "PUT" | "DELETE";
+export type AuthRequirement =
+    | { type: "NONE" }
+    | { type: "OPTIONAL" }
+    | { type: "REQUIRED" }
+    | { type: "ROLE"; role: UserRole }
+    | { type: "ROLE_MIN"; role: UserRole }; // Minimum privilege level (teacher or higher)
+
+export type HttpMethod = 
+    | "GET"
+    | "POST"
+    | "PUT"
+    | "DELETE"
+    | "PATCH"
+    | "HEAD"
+    | "OPTIONS"
+    | "TRACE"
+    | "CONNECT";
+export interface AppRoute<TBody = unknown, TParams = unknown, TQuery = unknown> {
+    method: HttpMethod;
     path: string;
     schema?: {
-        body?: unknown;
-        params?: unknown;
+        body?: any;
+        params?: any;
+        response?: Record<number, any>;
     };
-    auth?: "OPTIONAL" | "REQUIRED";
-    handler: (ctx: {
+    auth?: AuthRequirement;
+        handler: (ctx: {
         body: TBody;
         params: TParams;
-        user?: User;
-        sessionId?: string;
+        query: TQuery;
+        user?: AuthUser;
+        req: FastifyRequest;
+        reply: FastifyReply;
     }) => Promise<unknown>;
 }

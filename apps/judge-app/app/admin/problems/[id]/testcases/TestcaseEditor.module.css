@@ -1,0 +1,98 @@
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    font-family: system-ui, sans-serif;
+}
+
+.title {
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+.link {
+    font-size: 26px;
+    color:#2563eb;
+}
+
+.panel {
+    background: #0f172a;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    color: #e5e7eb;
+}
+
+.testcase {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+.header select {
+    margin-left: auto;
+}
+
+.delete {
+    background: none;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.io {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.panel textarea,
+.panel select {
+    background: #020617;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+    color: #e5e7eb;
+    font-family: monospace;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 24px;
+}
+
+.primary {
+    background: #2563eb;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 18px;
+    color: white;
+    font-weight: 600;
+}
+
+.secondary {
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    border-radius: 10px;
+    padding: 12px 18px;
+    color: #e5e7eb;
+}

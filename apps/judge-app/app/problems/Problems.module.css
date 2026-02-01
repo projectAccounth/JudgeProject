@@ -1,0 +1,227 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    font-family: system-ui, sans-serif;
+}
+
+.title {
+    font-size: 28px;
+    margin-bottom: 24px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.card {
+    background: rgba(15, 15, 25, 0.7);
+    border-radius: 12px;
+    padding: 16px;
+    color: #e5e7eb;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.pid {
+    font-family: monospace;
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+.problemTitle {
+    font-size: 18px;
+    margin: 4px 0;
+}
+
+.desc {
+    font-size: 14px;
+    color: #cbd5f5;
+    line-height: 1.4;
+    flex-grow: 1;
+}
+
+.meta {
+    display: flex;
+    gap: 12px;
+    font-size: 13px;
+    color: #94a3b8;
+    margin-top: 12px;
+}
+
+/* Difficulty pills */
+
+.diff {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.EASY {
+    background: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
+}
+
+.MEDIUM {
+    background: rgba(243, 156, 18, 0.15);
+    color: #f39c12;
+}
+
+.HARD {
+    background: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+}
+
+.controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    align-items: center;
+}
+
+/* Unified input/select container */
+.field {
+    background: #020617;
+    border-radius: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    padding: 2px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field:focus-within {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+}
+
+.field input,
+.field select {
+    background: transparent;
+    border: none;
+    color: #e5e7eb;
+    padding: 10px 14px;
+    font-size: 14px;
+    outline: none;
+    min-width: 180px;
+}
+
+/* Search field grows */
+.field:first-child {
+    flex: 1;
+}
+
+.field input::placeholder {
+    color: #64748b;
+}
+
+/* Select arrow polish */
+.field select {
+    appearance: none;
+    cursor: pointer;
+}
+
+/* Apply button */
+.apply {
+    padding: 11px 18px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(180deg, #2563eb, #1d4ed8);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.apply:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
+}
+
+.apply:active {
+    transform: translateY(0);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-top: 32px;
+    padding: 24px;
+    background: rgba(15, 15, 25, 0.5);
+    border-radius: 8px;
+}
+
+.pageBtn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid #374151;
+    background: rgba(30, 30, 45, 0.8);
+    color: #e5e7eb;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pageBtn:hover:not(.disabled) {
+    transform: translateY(-2px);
+    border-color: #2563eb;
+    background: rgba(37, 99, 235, 0.2);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.pageBtn:active:not(.disabled) {
+    transform: translateY(0);
+}
+
+.pageBtn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pageInfo {
+    color: #9ca3af;
+    font-size: 14px;
+    min-width: 80px;
+    text-align: center;
+}
+
+.loadMore {
+    padding: 6px 6px;
+    border-radius: 6px;
+    align-self: stretch;
+    border: none;
+    background: linear-gradient(90deg, #aa63aa, #1d4ed8);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+.loadMore:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(223, 35, 200, 0.45);
+    background: linear-gradient(90deg, #1d4ed8, #aa63aa);
+}
+
+.loadMore:active {
+    transform: translateY(0);
+}

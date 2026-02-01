@@ -1,0 +1,303 @@
+/* Container and Layout */
+
+.container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 32px 28px;
+    color: #e6e8ee;
+}
+
+/* Header */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 32px;
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.header > div {
+    flex: 1;
+}
+
+.title {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin: 0 0 8px 0;
+    color: #f1f3f8;
+}
+
+.subtitle {
+    font-size: 16px;
+    color: #9aa4b2;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* CTA Button */
+
+.ctaButton {
+    display: inline-block;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #5dade2 0%, #3498db 100%);
+    color: #fff;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.ctaButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(93, 173, 226, 0.3);
+}
+
+/* Quick Navigation */
+
+.quickNav {
+    background: #111827;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 48px;
+    border: 1px solid rgba(93, 173, 226, 0.15);
+}
+
+.quickNav h3 {
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #f1f3f8;
+}
+
+.navLinks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 12px;
+}
+
+.navLink {
+    padding: 12px 16px;
+    background: rgba(93, 173, 226, 0.08);
+    border-radius: 10px;
+    color: #5dade2;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(93, 173, 226, 0.15);
+}
+
+.navLink:hover {
+    background: rgba(93, 173, 226, 0.15);
+    border-color: rgba(93, 173, 226, 0.3);
+    transform: translateX(4px);
+}
+
+/* Content */
+
+.content {
+    margin-bottom: 48px;
+}
+
+.section {
+    margin-bottom: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.section:last-child {
+    border-bottom: none;
+}
+
+.sectionTitle {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: #f1f3f8;
+}
+
+.sectionDesc {
+    font-size: 15px;
+    color: #9aa4b2;
+    margin: 0 0 24px 0;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+.sectionContent {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sectionPoint {
+    margin: 0;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    border-left: 4px solid #5dade2;
+    font-size: 15px;
+    color: #e6e8ee;
+    line-height: 1.6;
+    transition: all 0.2s ease;
+}
+
+.sectionPoint:hover {
+    background: rgba(93, 173, 226, 0.08);
+    border-left-color: #3498db;
+}
+
+/* Help Box */
+
+.helpBox {
+    background: linear-gradient(135deg, rgba(93, 173, 226, 0.12) 0%, rgba(155, 89, 182, 0.08) 100%);
+    border: 1px solid rgba(93, 173, 226, 0.25);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 32px;
+}
+
+.helpBox h3 {
+    margin: 0 0 12px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #5dade2;
+}
+
+.helpBox p {
+    margin: 0 0 20px 0;
+    font-size: 15px;
+    color: #e6e8ee;
+    line-height: 1.6;
+}
+
+.helpLinks {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.helpLink {
+    display: inline-block;
+    padding: 10px 18px;
+    background: rgba(93, 173, 226, 0.15);
+    border-radius: 8px;
+    color: #5dade2;
+    text-decoration: none;
+    font-weight: 5;
+    font-size: 14px;
+    border: 1px solid rgba(93, 173, 226, 0.2);
+    transition: all 0.2s ease;
+}
+
+.helpLink:hover {
+    background: rgba(93, 173, 226, 0.25);
+    border-color: rgba(93, 173, 226, 0.4);
+}
+
+/* Footer / Back Button */
+
+.footer {
+    display: flex;
+    justify-content: center;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.backButton {
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    color: #e6e8ee;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.backButton:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px 16px;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .title {
+        font-size: 24px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+    }
+
+    .ctaButton {
+        width: 100%;
+        text-align: center;
+    }
+
+    .navLinks {
+        grid-template-columns: 1fr;
+    }
+
+    .sectionTitle {
+        font-size: 18px;
+    }
+
+    .helpLinks {
+        flex-direction: column;
+    }
+
+    .helpLink {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 16px 12px;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+
+    .quickNav {
+        padding: 16px;
+    }
+
+    .section {
+        margin-bottom: 32px;
+        padding-bottom: 32px;
+    }
+
+    .sectionContent {
+        gap: 12px;
+    }
+
+    .sectionPoint {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+
+    .helpBox {
+        padding: 20px;
+    }
+}

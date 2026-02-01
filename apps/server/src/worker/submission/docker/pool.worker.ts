@@ -11,6 +11,15 @@ export class WorkerPool<T> {
         return [...this.idle, ...Array.from(this.busy)];
     }
 
+    getStats() {
+        return {
+            idle: this.idle.length,
+            busy: this.busy.size,
+            waiting: this.waiters.length,
+            total: this.idle.length + this.busy.size,
+        };
+    }
+
     async acquire(): Promise<T> {
         const w = this.idle.pop();
         if (w) {

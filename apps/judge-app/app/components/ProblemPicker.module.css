@@ -1,0 +1,242 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background-color: #0f1117;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.filters {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    background-color: #1a1f2e;
+    padding: 1rem;
+    border-radius: 6px;
+}
+
+.search {
+    flex: 1;
+    min-width: 250px;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #3f4654;
+    border-radius: 6px;
+    background-color: #1a1e2e;
+    color: #e6e8ee;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+.searchInput::placeholder {
+    color: #9aa4b2;
+}
+
+.difficulty {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.difficulty label {
+    color: #9aa4b2;
+    font-weight: 500;
+}
+
+.select {
+    padding: 0.75rem;
+    border: 1px solid #3f4654;
+    border-radius: 6px;
+    background-color: #1a1e2e;
+    color: #e6e8ee;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.select:hover {
+    border-color: #5d6c7f;
+}
+
+.select:focus {
+    outline: none;
+    border-color: #0066cc;
+}
+
+.problemsList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+    background-color: #0f1117;
+    padding: 1rem;
+    border-radius: 6px;
+    border: 1px solid #2d3748;
+}
+
+.problemsList::-webkit-scrollbar {
+    width: 8px;
+}
+
+.problemsList::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.problemsList::-webkit-scrollbar-thumb {
+    background: #3f4654;
+    border-radius: 4px;
+}
+
+.problemsList::-webkit-scrollbar-thumb:hover {
+    background: #5d6c7f;
+}
+
+.problemItem {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: #0f1117;
+    border: 1px solid #1f2937;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.problemItem:hover {
+    border-color: #0066cc;
+    background-color: #1a2a3a;
+}
+
+.problemItem.selected {
+    border-color: #0066cc;
+    background-color: #1a2a4a;
+}
+
+.checkbox {
+    min-width: 20px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #0066cc;
+}
+
+.problemInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.problemLink {
+    text-decoration: none;
+    color: inherit;
+}
+
+.problemLink h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #f1f3f8;
+    transition: color 0.2s;
+}
+
+.problemLink:hover h4 {
+    color: #5dade2;
+}
+
+.description {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #9aa4b2;
+    line-height: 1.4;
+}
+
+.meta {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.difficulty {
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.difficulty.easy {
+    background-color: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+}
+
+.difficulty.medium {
+    background-color: rgba(241, 196, 15, 0.2);
+    color: #f1c40f;
+}
+
+.difficulty.hard {
+    background-color: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+}
+
+.empty {
+    text-align: center;
+    color: #9aa4b2;
+    padding: 2rem;
+    background-color: #1f2937;
+    border-radius: 8px;
+    border: 2px dashed #3f4654;
+}
+
+.actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #2d3748;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btnSave {
+    background-color: #0066cc;
+    color: white;
+}
+
+.btnSave:hover:not(:disabled) {
+    background-color: #0052a3;
+}
+
+.btnCancel {
+    background-color: #3f4654;
+    color: #e6e8ee;
+}
+
+.btnCancel:hover:not(:disabled) {
+    background-color: #5d6c7f;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

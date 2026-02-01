@@ -1,0 +1,119 @@
+.container {
+    max-width: 1200px;
+}
+
+.title {
+    font-size: 28px;
+    margin-bottom: 24px;
+}
+
+.summary {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.summaryCard {
+    background: #020617;
+    border: 1px solid #1e293b;
+    border-radius: 10px;
+    padding: 16px;
+    min-width: 160px;
+}
+
+.danger {
+    border-color: #7f1d1d;
+}
+
+.summaryLabel {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.summaryValue {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* Pools */
+
+.pool {
+    margin-bottom: 40px;
+}
+
+.poolHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.stats {
+    display: flex;
+    gap: 12px;
+}
+
+.stat {
+    font-size: 13px;
+    color: #cbd5f5;
+}
+
+/* Workers */
+
+.workerGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.worker {
+    background: #020617;
+    border: 1px solid #1e293b;
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.workerHeader {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.workerId {
+    font-family: monospace;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.workerMeta {
+    font-size: 12px;
+    color: #cbd5f5;
+}
+
+/* Badges */
+
+.badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+}
+
+.badge[data-color="green"] {
+    background: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
+}
+
+.badge[data-color="amber"] {
+    background: rgba(243, 156, 18, 0.15);
+    color: #f39c12;
+}
+
+.badge[data-color="red"] {
+    background: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+}
+
+.badge[data-color="gray"] {
+    background: rgba(148, 163, 184, 0.15);
+    color: #94a3b8;
+}

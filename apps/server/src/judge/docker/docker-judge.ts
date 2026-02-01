@@ -1,11 +1,10 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import os from "node:os";
-import { Judge, JudgeRequest, JudgeResult } from "../../domain/judge";
+import { Judge, JudgeRequest, JudgeResult } from "@judgeapp/shared/domain/judge";
 import { LanguagePools } from "../../worker/submission/docker/pool.languages";
 import { normalizePath } from "../../utils/path";
-import { LanguageConfig, LANGUAGES } from "../../domain/languages";
-import { Language } from "../../utils/types";
+import { Language, LanguageConfig, LANGUAGES } from "@judgeapp/shared/domain/languages"
 
 export class DockerJudge implements Judge {
     constructor(private readonly pools: LanguagePools) {}
@@ -76,12 +75,11 @@ export class DockerJudge implements Judge {
     ): JudgeResult {
         return {
             status,
-            stdout: "",
-            stderr: "",
             timeMs: req.limits.timeMs,
             memoryKb: 0,
             passed: 0,
-            total: req.testCases.length
+            total: req.testCases.length,
+            case_results: []
         };
     }
 }

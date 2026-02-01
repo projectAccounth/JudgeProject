@@ -1,0 +1,52 @@
+.tableWrapper {
+    background: #0f172a;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #e5e7eb;
+}
+
+.table thead th {
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #94a3b8;
+    padding: 12px;
+}
+
+.table tbody td {
+    padding: 14px 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    vertical-align: middle;
+}
+
+.row {
+    transition: background 0.15s ease;
+}
+
+.row:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+/* Shared column helpers */
+
+.id {
+    font-family: monospace;
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}

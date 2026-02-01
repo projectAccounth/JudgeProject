@@ -1,0 +1,9 @@
+export interface Session {
+    id: string;
+    userId: string;
+    createdAt: Date;
+    expiresAt: Date;
+    maxExpiresAt: Date;
+    userAgent?: string;
+    ipAddress?: string;
+}

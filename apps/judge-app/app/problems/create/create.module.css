@@ -1,0 +1,269 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    color: #e6e8ee;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.backLink {
+    display: inline-block;
+    color: #5dade2;
+    text-decoration: none;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    transition: color 0.2s;
+}
+
+.backLink:hover {
+    color: #3498db;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #f1f3f8;
+}
+
+.subtitle {
+    margin: 0.5rem 0 0 0;
+    font-size: 1.1rem;
+    color: #9aa4b2;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.card {
+    background: #1f2937;
+    border: 1px solid #3f4654;
+    border-radius: 12px;
+    padding: 2rem;
+    transition: all 0.3s;
+}
+
+.card:hover {
+    border-color: #5dade2;
+    box-shadow: 0 4px 20px rgba(93, 173, 226, 0.1);
+}
+
+.card h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+    color: #f1f3f8;
+}
+
+.cardDescription {
+    margin: 0 0 1.5rem 0;
+    color: #9aa4b2;
+    line-height: 1.6;
+}
+
+.error {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #e74c3c;
+    margin-bottom: 2rem;
+}
+
+.selectedProblem {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #3f4654;
+}
+
+.selectedProblem h3 {
+    margin: 0 0 1rem 0;
+    color: #5dade2;
+    font-size: 1.1rem;
+}
+
+.problemCard {
+    background: rgba(93, 173, 226, 0.05);
+    border: 1px solid #5dade2;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.problemCard h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+    color: #f1f3f8;
+}
+
+.problemCard p {
+    margin: 0 0 1rem 0;
+    color: #9aa4b2;
+    line-height: 1.5;
+}
+
+.viewButton {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: #0066cc;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.viewButton:hover {
+    background: #0052a3;
+}
+
+.divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #3f4654, transparent);
+}
+
+.uploadSection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.uploadBox {
+    border: 2px dashed #5dade2;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    background: rgba(93, 173, 226, 0.05);
+    transition: all 0.3s;
+}
+
+.uploadBox:hover {
+    border-color: #3498db;
+    background: rgba(93, 173, 226, 0.1);
+}
+
+.uploadIcon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.uploadBox h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+    color: #f1f3f8;
+}
+
+.uploadBox p {
+    margin: 0 0 1.5rem 0;
+    color: #9aa4b2;
+    font-size: 0.95rem;
+}
+
+.uploadButton {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.uploadButton:hover {
+    background: #0052a3;
+}
+
+.infoBox {
+    background: rgba(52, 152, 219, 0.05);
+    border-left: 4px solid #3498db;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.infoBox h4 {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    color: #5dade2;
+}
+
+.infoBox ul {
+    margin: 0;
+    padding: 0 0 0 1.5rem;
+}
+
+.infoBox li {
+    margin: 0.5rem 0;
+    color: #9aa4b2;
+    line-height: 1.6;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.feature {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: rgba(93, 173, 226, 0.05);
+    border: 1px solid #3f4654;
+    border-radius: 8px;
+}
+
+.feature:hover {
+    border-color: #5dade2;
+    background: rgba(93, 173, 226, 0.1);
+}
+
+.featureIcon {
+    font-size: 1.8rem;
+    min-width: 40px;
+    text-align: center;
+}
+
+.feature h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    color: #f1f3f8;
+}
+
+.feature p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #9aa4b2;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .header h1 {
+        font-size: 1.8rem;
+    }
+
+    .uploadSection {
+        grid-template-columns: 1fr;
+    }
+
+    .features {
+        grid-template-columns: 1fr;
+    }
+}

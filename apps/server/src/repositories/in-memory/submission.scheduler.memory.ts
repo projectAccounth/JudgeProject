@@ -1,6 +1,4 @@
-import { rejects } from "node:assert/strict";
-import { Judge } from "../../domain/judge";
-import { Submission, SubmissionRepository } from "../../domain/submission";
+import { SubmissionRepository } from "@judgeapp/shared/domain/submission";
 import { SubmissionExecutionService } from "../../services/submission.service";
 
 export class SubmissionScheduler {

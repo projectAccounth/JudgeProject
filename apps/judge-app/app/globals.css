@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Define custom colors if you want to reuse them */
+  --color-black-ish: #0a0a0a;
+  --color-dark-blue: #001f3f;
+  
+  /* Create a custom background-image utility */
+  --background-image-main-gradient: linear-gradient(
+    to bottom, 
+    var(--color-black-ish) 0%, 
+    var(--color-dark-blue) 50%, 
+    var(--color-black-ish) 100%
+  );
+  
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Base styles using the new theme variables */
+body {
+  @apply bg-main-gradient bg-fixed min-h-screen text-[#ededed];
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}

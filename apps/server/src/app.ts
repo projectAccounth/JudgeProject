@@ -1,7 +1,8 @@
 import Fastify, { FastifyInstance } from "fastify";
 import { AppError } from "./errors/app-error";
 import { registerRoutes } from "./routes/registry";
-import { echoRoutes, healthRoutes, problemRoutes } from "./routes/route-defs";
+import { AppRoute } from "./routes/types";
+import { analysisRoutes, authRoutes, echoRoutes, healthRoutes, problemRoutes, statsRoutes, submissionRoutes, userAdminRoutes, problemAdminRoutes, publicProfileRoutes, submissionAdminRoutes, teacherRoutes, contestRoutes } from "./routes/route-defs";
 import { EchoService } from "./services/echo.service";
 import { EchoController } from "./controllers/echo.controller";
 import { InMemoryEchoRepository } from "./repositories/in-memory/echo.repository.memory";
@@ -13,8 +14,22 @@ import { createWorkerContainer } from "./worker/submission/container";
 import { AuthService } from "./services/auth.service";
 import { SqlUserRepository } from "./repositories/sql/user.repository.sql";
 import { SqlSessionRepository } from "./repositories/sql/session.repository.sql";
+import { StatsService } from "./services/stats.service";
+import { StatsController } from "./controllers/stats.controller";
+import { UserAdminService } from "./services/user-admin.service";
+import { UserAdminController } from "./controllers/user-admin.controller";
+import { ProblemAdminService } from "./services/problem-admin.service";
+import { ProblemAdminController } from "./controllers/problem-admin.controller";
+import { SubmissionAdminService } from "./services/submission-admin.service";
+import { SubmissionAdminController } from "./controllers/submission-admin.controller";
+import { TeacherService } from "./services/teacher.service";
+import { TeacherController } from "./controllers/teacher.controller";
+import { ContestController } from "./controllers/contest.controller";
+import { analysisCacheService } from "./services/analysis-cache.service";
+import cors from "@fastify/cors"
+import { fastifyJwt } from "@fastify/jwt";
 
-export function buildApp() {
+export async function buildApp() {
     const app: FastifyInstance = Fastify({ 
         loggerInstance: {
             info: (msg: any, ...args: any) => {
@@ -32,8 +47,18 @@ export function buildApp() {
         }
     }) as any;
 
+    app.register((cors as any), {
+        origin: true,
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+    });
+
     app.setErrorHandler((error, _req, reply) => {
+        console.error("[ERROR HANDLER]", error);
+        
         if (error instanceof AppError) {
+            console.log("[AppError]", { code: error.code, statusCode: error.statusCode, message: error.message });
             reply.status(error.statusCode).send({
                 error: {
                     code: error.code,
@@ -44,11 +69,17 @@ export function buildApp() {
             return;
         }
 
-        app.log.error(error);
+        console.error("[Unknown Error]", {
+            name: (error as any)?.name,
+            message: (error as any)?.message,
+            stack: (error as any)?.stack,
+        });
+        
         reply.status(500).send({
             error: {
                 code: "INTERNAL_ERROR",
                 message: "Internal server error",
+                details: process.env.NODE_ENV === 'development' ? (error as any)?.message : undefined,
             },
         });
     });
@@ -65,31 +96,70 @@ export function buildApp() {
     const authService = new AuthService(userRepository, sessionRepository);
 
     app.register(require("@fastify/cookie"));
-    app.addHook("preHandler", async (req: any, res: any) => {
-        const sid = req.cookies?.sid;
-        if (!sid) {
+    
+    // Decorate request with user property BEFORE the hook
+    app.decorateRequest("user", null);
+
+    app.addHook("preHandler", async (req) => {
+        const sessionId = (req as any).cookies?.session_id;
+
+        if (!sessionId) {
+            (req as any).user = null;
             return;
         }
 
-        const user = await authService.validateSession(sid);
-        if (!user) {
-            return;
-        }
-
-        req.user = user;
-        req.sessionId = sid;
+        (req as any).user = await authService.validateSession(sessionId);
     });
 
     initializeJudge(app, { submissionController });
     const { scheduler, authoringService } = createWorkerContainer(submissionRepo);
 
+    const statsService = new StatsService(submissionRepo);
+    const statsController = new StatsController(statsService);
+
+    // Initialize admin services
+    const userAdminService = new UserAdminService(userRepository);
+    const userAdminController = new UserAdminController(userAdminService);
+    const problemAdminService = new ProblemAdminService(await authoringService.getProblemRepo());
+    const problemAdminController = new ProblemAdminController(problemAdminService);
+    const submissionAdminService = new SubmissionAdminService(submissionRepo, userRepository, await authoringService.getProblemRepo());
+    const submissionAdminController = new SubmissionAdminController(submissionAdminService);
+    const teacherService = new TeacherService(await authoringService.getProblemRepo(), submissionRepo);
+    const teacherController = new TeacherController(teacherService);
+    const contestController = new ContestController();
+
     registerRoutes(app, [
         ...echoRoutes(echoController),
         ...healthRoutes(healthController),
-        ...problemRoutes(authoringService)
-    ]);
+        ...problemRoutes(authoringService),
+        ...submissionRoutes(submissionController),
+        ...statsRoutes(statsController),
+        ...analysisRoutes(),
+        ...authRoutes(authService),
+        ...userAdminRoutes(userAdminController),
+        ...problemAdminRoutes(problemAdminController),
+        ...submissionAdminRoutes(submissionAdminController),
+        ...teacherRoutes(teacherController),
+        ...contestRoutes(contestController),
+        ...publicProfileRoutes(userAdminController)
+    ] as AppRoute[]);
 
     scheduler.start();
+
+    // Set up analysis cache cleanup (every 24 hours)
+    const cleanupInterval = setInterval(async () => {
+        try {
+            const deleted = await analysisCacheService.cleanup();
+            app.log.info(`Cache cleanup: removed ${deleted} expired entries`);
+        } catch (error) {
+            app.log.error(`Cache cleanup error: ${error}`);
+        }
+    }, 24 * 60 * 60 * 1000);
+
+    // Clean up interval on graceful shutdown
+    app.addHook("onClose", async () => {
+        clearInterval(cleanupInterval);
+    });
 
     return app;
 }

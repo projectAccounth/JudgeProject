@@ -1,7 +1,10 @@
 import { FastifyInstance } from "fastify";
+import { buildJsonSchemas } from "fastify-zod";
 import { AppRoute } from "./types";
+import { AuthUser, hasRolePrivilege } from "../domain/user";
+import { AppError } from "../errors/app-error";
 
-export function registerRoutes(
+export async function registerRoutes(
     fastify: FastifyInstance,
     routes: AppRoute[]
 ) {
@@ -9,24 +12,42 @@ export function registerRoutes(
         fastify.route({
             method: route.method,
             url: route.path,
-            schema: route.schema,
-            handler: async (req, res) => {
-                const user = (req as any).user;
-                const sessionId = (req as any).sessionId;
+            schema: route.schema
+                ? buildJsonSchemas(route.schema as any) as any
+                : undefined,
 
-                if (route.auth === "REQUIRED" && !user) {
-                    return res
-                        .status(401)
-                        .send({ error: "Unauthorized" });
+            preHandler: async (req, res) => {
+                const auth = route.auth ?? { type: "NONE" };
+                const user = (req as any).user as AuthUser | null;
+
+                if (auth.type === "REQUIRED" && !user) {
+                    throw new AppError("UNAUTHORIZED", "Unauthorized", 401);
                 }
 
+                if (auth.type === "ROLE") {
+                    if (!user || user.role !== auth.role) {
+                        throw new AppError("FORBIDDEN", "Forbidden", 403);
+                    }
+                }
+
+                if (auth.type === "ROLE_MIN") {
+                    if (!user || !hasRolePrivilege(user.role, auth.role)) {
+                        throw new AppError("FORBIDDEN", "Forbidden - insufficient privilege level", 403);
+                    }
+                }
+            },
+
+            handler: async (req, reply) => {
                 return route.handler({
                     body: req.body,
                     params: req.params,
-                    user,
-                    sessionId
+                    query: req.query,
+                    user: (req as any).user ?? undefined,
+                    req,
+                    reply
                 });
             }
         });
     }
 }
+

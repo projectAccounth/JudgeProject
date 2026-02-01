@@ -1,0 +1,309 @@
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    font-family: system-ui, sans-serif;
+}
+
+.title {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.tableWrapper {
+    background: #0f172a;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #e5e7eb;
+}
+
+.table thead th {
+    text-align: left;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #94a3b8;
+    padding: 12px;
+}
+
+.row {
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.row:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.table tbody td {
+    padding: 14px 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.id a {
+    font-family: monospace;
+    color: #60a5fa;
+    text-decoration: none;
+}
+
+.id a:hover {
+    text-decoration: underline;
+}
+
+.user {
+    font-weight: 500;
+}
+
+.userLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #60a5fa;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.userLink:hover {
+    background: rgba(96, 165, 250, 0.1);
+    color: #93c5fd;
+    text-decoration: underline;
+}
+
+.problem {
+    font-weight: 500;
+}
+
+.problemLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #60a5fa;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.problemLink:hover {
+    background: rgba(96, 165, 250, 0.1);
+    color: #93c5fd;
+    text-decoration: underline;
+}
+
+.loading {
+    color: #9aa4b2;
+    font-size: 13px;
+    font-style: italic;
+}
+
+.lang {
+    font-family: monospace;
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+/* Status badges */
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}
+
+/* Verdict colors */
+
+.AC {
+    background: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
+}
+
+.WA {
+    background: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+}
+
+.TLE {
+    background: rgba(243, 156, 18, 0.15);
+    color: #f39c12;
+}
+
+.MLE {
+    background: rgba(155, 89, 182, 0.15);
+    color: #9b59b6;
+}
+
+.RE {
+    background: rgba(230, 126, 34, 0.15);
+    color: #e67e22;
+}
+
+.PENDING,
+.RUNNING {
+    background: rgba(52, 152, 219, 0.15);
+    color: #3498db;
+}
+.viewCell {
+    text-align: center;
+}
+
+.viewBtn {
+    display: inline-block;
+    padding: 6px 14px;
+    background: #0070f3;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.viewBtn:hover {
+    background: #0051cc;
+    transform: translateY(-1px);
+}
+
+.paginationContainer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.loadMoreBtn {
+    padding: 10px 24px;
+    background: #0070f3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.loadMoreBtn:hover {
+    background: #0051cc;
+    transform: translateY(-1px);
+}
+
+.filterForm {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: rgba(15, 15, 25, 0.5);
+    border-radius: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filterField {
+    flex: 1;
+    min-width: 120px;
+}
+
+.filterField input,
+.filterField select {
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(30, 30, 45, 0.8);
+    border: 1px solid #374151;
+    border-radius: 6px;
+    color: #e5e7eb;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.filterField input:focus,
+.filterField select:focus {
+    outline: none;
+    border-color: #2563eb;
+    background: rgba(30, 30, 45, 0.9);
+}
+
+.filterBtn {
+    padding: 8px 24px;
+    background: linear-gradient(90deg, #2563eb, #1d4ed8);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filterBtn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.statItem {
+    background: rgba(30, 30, 45, 0.7);
+    border: 1px solid #374151;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+}
+
+.statItem.accepted {
+    border-left: 4px solid #10b981;
+}
+
+.statItem.failed {
+    border-left: 4px solid #ef4444;
+}
+
+.statItem.pending {
+    border-left: 4px solid #f59e0b;
+}
+
+.statLabel {
+    display: block;
+    color: #9ca3af;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.statValue {
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+    color: #e5e7eb;
+}
+
+.statItem.accepted .statValue {
+    color: #10b981;
+}
+
+.statItem.failed .statValue {
+    color: #ef4444;
+}
+
+.statItem.pending .statValue {
+    color: #f59e0b;
+}
+
+.noSubmissions {
+    text-align: center;
+    padding: 40px 20px;
+    color: #9ca3af;
+    font-size: 16px;
+}

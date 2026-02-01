@@ -1,0 +1,98 @@
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    font-family: system-ui, sans-serif;
+    justify-content: space-between;
+}
+
+.title {
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+.panel {
+    background: #0f172a;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    color: #e5e7eb;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+
+.panel input,
+.panel textarea,
+.panel select {
+    background: #020617;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+    color: #e5e7eb;
+    font-family: inherit;
+}
+
+.panel textarea {
+    resize: vertical;
+}
+
+.row {
+    display: flex;
+    gap: 16px;
+}
+
+.saveButton {
+    margin-top: 20px;
+    background: #2563eb;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 18px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.link {
+    font-size: 26px;
+    color:#2563eb;
+}
+
+.redirectButton {
+    margin-top: 20px;
+    background: #25eb24;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 18px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.saveButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.meta {
+    margin-top: 20px;
+    font-size: 12px;
+    color: #94a3b8;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.meta code {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-family: monospace;
+}
+

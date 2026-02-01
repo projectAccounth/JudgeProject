@@ -1,9 +1,7 @@
 import crypto from "node:crypto";
 import { ProblemRepository } from "../repositories/problem.repository";
 import { TestCaseRepository } from "../repositories/testcase.repository";
-import { Problem } from "../domain/problem";
-import { TestCase } from "../domain/testcase";
-import { ProblemAuthorInput } from "../api/dto/problem-author.dto";
+import { ProblemAuthorInput } from "@judgeapp/shared/api/dto/problem-author.dto";
 
 export type DuplicatePolicy =
     | "FAIL"
@@ -15,6 +13,14 @@ export class ProblemAuthoringService {
         private readonly testcaseRepo: TestCaseRepository
     ) {}
 
+    async getProblemRepo(): Promise<ProblemRepository> { return this.problemRepo; }
+    async getTestcaseRepo(): Promise<TestCaseRepository> { return this.testcaseRepo; }
+
+    /**
+     * Adds a problem to the database if possible.
+     * @param input The problem data.
+     * @param policy The duplicate policy. FAIL for failure on duplicate, REPLACE otherwise. 
+     */
     async addProblem(
         input: ProblemAuthorInput,
         policy: DuplicatePolicy = "FAIL"
@@ -32,28 +38,51 @@ export class ProblemAuthoringService {
             await this.problemRepo.removeById(existing.id);
         }
 
-        this.assertHasTestcases(input);
-
         const testcaseSetId = crypto.randomUUID();
         const now = new Date();
 
         await this.problemRepo.add({
             id: input.id,
             title: input.title,
+            statement: input.statement ?? "",
             description: input.description,
             difficulty: input.difficulty,
             timeLimitMs: input.limits.timeMs,
             memoryLimitMb: input.limits.memoryMb,
+            tags: input.tags ?? [],
+            category: input.category ?? [],
             testcaseSetId,
             createdAt: now,
             updatedAt: now
         });
+
+        if (!this.hasTestCases(input)) return;
 
         await this.insertTestcases(
             testcaseSetId,
             input.testcases,
             1
         );
+    }
+
+
+    /**
+     * Modifies a problem with the specified input.
+     * @param input The problem input.
+     * @note This does not add test cases.
+     */
+    async modifyProblem(
+        input: ProblemAuthorInput
+    ): Promise<void> {
+        const existing = await this.problemRepo.findById(input.id);
+
+        if (!existing) {
+            throw new Error(
+                `Problem with id=${input.id} does not exist`
+            );
+        }
+
+        await this.problemRepo.modifyProblem(input);
     }
 
     async addTestCase(
@@ -84,11 +113,17 @@ export class ProblemAuthoringService {
     private assertHasTestcases(
         input: { testcases: unknown[] }
     ): void {
-        if (input.testcases.length === 0) {
+        if (!this.hasTestCases(input)) {
             throw new Error(
                 "Problem must have at least one testcase"
             );
         }
+    }
+
+    private hasTestCases(
+        input: { testcases: unknown[] }
+    ): boolean {
+        return input.testcases.length !== 0;
     }
 
     private async insertTestcases(
@@ -119,4 +154,6 @@ export class ProblemAuthoringService {
             });
         }
     }
+
+
 }

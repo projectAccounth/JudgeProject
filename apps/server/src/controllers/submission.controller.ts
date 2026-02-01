@@ -1,11 +1,13 @@
 import { SubmissionCommandService } from "../services/submission.command.service";
-import { Submission } from "../domain/submission";
-import { Language } from "../utils/types";
+import { Submission } from "@judgeapp/shared/domain/submission"
+import { Language } from "@judgeapp/shared/domain/languages"
 
 export class SubmissionController {
     constructor(
         private readonly service: SubmissionCommandService
     ) {}
+
+    private async getRepo() { return this.service.getRepo(); }
 
     async create(problemId: string, sourceCode: string, userId: string, pLanguage: Language) {
         const submission =
@@ -32,5 +34,12 @@ export class SubmissionController {
 
     async getAll(): Promise<Submission[]> {
         return [...await this.service.getAll()];
+    }
+
+    async getPaginated(limit: number, after?: Date): Promise<{
+        submissions: Submission[],
+        nextCursor: Date | null
+    }> {
+        return (await this.service.getRepo()).getPaginated(limit, after);
     }
 }

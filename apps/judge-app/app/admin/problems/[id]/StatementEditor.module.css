@@ -1,0 +1,68 @@
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.editor,
+.preview {
+    background: #020617;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.header {
+    background: rgba(255, 255, 255, 0.04);
+    padding: 8px 12px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #94a3b8;
+}
+
+.editor textarea {
+    width: 100%;
+    height: 360px;
+    background: transparent;
+    border: none;
+    padding: 12px;
+    color: #e5e7eb;
+    font-family: monospace;
+    font-size: 13px;
+    resize: none;
+}
+
+.preview .content {
+    padding: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Markdown styles */
+
+.preview h1,
+.preview h2,
+.preview h3 {
+    margin-top: 1em;
+}
+
+.preview code {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-family: monospace;
+}
+
+.preview pre code {
+    display: block;
+    padding: 12px;
+    overflow-x: auto;
+}
+
+/* KaTeX tweaks */
+
+.preview .katex {
+    font-size: 1em;
+}
