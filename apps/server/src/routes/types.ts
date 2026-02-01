@@ -7,7 +7,8 @@ export type AuthRequirement =
     | { type: "OPTIONAL" }
     | { type: "REQUIRED" }
     | { type: "ROLE"; role: UserRole }
-    | { type: "ROLE_MIN"; role: UserRole }; // Minimum privilege level (teacher or higher)
+    | { type: "ROLE_MIN"; role: UserRole } // Minimum privilege level (teacher or higher)
+    | { type: "EXCHANGE_KEY" }; // Server-to-server authentication with exchange key
 
 export type HttpMethod = 
     | "GET"

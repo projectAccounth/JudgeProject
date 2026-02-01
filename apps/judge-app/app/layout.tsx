@@ -4,6 +4,7 @@ import TopBar from "@/app/components/TopBar";
 import Footer from "@/app/components/Footer";
 import { I18nProvider } from "@/app/components/I18nProvider";
 import { AuthProvider } from "@/app/context/AuthContext";
+import { BackendStatusWarning } from "@/app/components/BackendStatusWarning";
 
 export const metadata: Metadata = {
     title: "CodeFix AI - Online Judge Platform",
@@ -20,6 +21,7 @@ export default function RootLayout({
             <body suppressHydrationWarning>
                     <AuthProvider>
                         <I18nProvider>
+                            <BackendStatusWarning />
                             <TopBar />
                             {children}
                             <Footer />

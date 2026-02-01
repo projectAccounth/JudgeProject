@@ -2,7 +2,7 @@ import Fastify, { FastifyInstance } from "fastify";
 import { AppError } from "./errors/app-error";
 import { registerRoutes } from "./routes/registry";
 import { AppRoute } from "./routes/types";
-import { analysisRoutes, authRoutes, echoRoutes, healthRoutes, problemRoutes, statsRoutes, submissionRoutes, userAdminRoutes, problemAdminRoutes, publicProfileRoutes, submissionAdminRoutes, teacherRoutes, contestRoutes } from "./routes/route-defs";
+import { analysisRoutes, authRoutes, echoRoutes, healthRoutes, problemRoutes, statsRoutes, submissionRoutes, userAdminRoutes, problemAdminRoutes, publicProfileRoutes, submissionAdminRoutes, teacherRoutes, contestRoutes, ollamaRoutes } from "./routes/route-defs";
 import { EchoService } from "./services/echo.service";
 import { EchoController } from "./controllers/echo.controller";
 import { InMemoryEchoRepository } from "./repositories/in-memory/echo.repository.memory";
@@ -51,7 +51,7 @@ export async function buildApp() {
         origin: true,
         credentials: true,
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"],
+        allowedHeaders: ["Content-Type", "Authorization", "x-exchange-key"],
     });
 
     app.setErrorHandler((error, _req, reply) => {
@@ -141,7 +141,8 @@ export async function buildApp() {
         ...submissionAdminRoutes(submissionAdminController),
         ...teacherRoutes(teacherController),
         ...contestRoutes(contestController),
-        ...publicProfileRoutes(userAdminController)
+        ...publicProfileRoutes(userAdminController),
+        ...ollamaRoutes()
     ] as AppRoute[]);
 
     scheduler.start();

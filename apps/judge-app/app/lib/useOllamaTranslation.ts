@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { translateWithOllama, checkOllamaHealth } from "./backendServer";
 
 interface TranslationCache {
   [key: string]: string;
@@ -36,27 +37,17 @@ export function useOllamaTranslation() {
       setError(null);
 
       try {
-        const response = await fetch("/api/translate", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            text,
-            targetLanguage,
-            sourceLanguage,
-          }),
+        const response = await translateWithOllama({
+          text,
+          targetLanguage,
+          sourceLanguage,
         });
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(
-            errorData.error || `HTTP ${response.status}`
-          );
+        if (response.error) {
+          throw new Error(response.error);
         }
 
-        const data = await response.json();
-        const translated = data.translation || text;
+        const translated = response.data?.translated || text;
 
         // Update cache
         setCache((prev) => ({
@@ -140,9 +131,8 @@ export function useOllamaTranslation() {
 
   const checkStatus = useCallback(async (): Promise<boolean> => {
     try {
-      const response = await fetch("/api/translate");
-      const data = await response.json();
-      return data.status === "available";
+      const response = await checkOllamaHealth();
+      return response.data?.available ?? false;
     } catch (err) {
       console.error("Failed to check Ollama status:", err);
       return false;

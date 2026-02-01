@@ -3,6 +3,7 @@ import { buildJsonSchemas } from "fastify-zod";
 import { AppRoute } from "./types";
 import { AuthUser, hasRolePrivilege } from "../domain/user";
 import { AppError } from "../errors/app-error";
+import { verifyExchangeKey } from "./auth-utils";
 
 export async function registerRoutes(
     fastify: FastifyInstance,
@@ -33,6 +34,12 @@ export async function registerRoutes(
                 if (auth.type === "ROLE_MIN") {
                     if (!user || !hasRolePrivilege(user.role, auth.role)) {
                         throw new AppError("FORBIDDEN", "Forbidden - insufficient privilege level", 403);
+                    }
+                }
+
+                if (auth.type === "EXCHANGE_KEY") {
+                    if (!verifyExchangeKey(req)) {
+                        throw new AppError("UNAUTHORIZED", "Invalid or missing exchange key", 401);
                     }
                 }
             },

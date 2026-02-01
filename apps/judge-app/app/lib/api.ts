@@ -1,5 +1,6 @@
 import { ProblemAuthorInput } from "@judgeapp/shared/api/dto/problem-author.dto";
 import { TestCase } from "@judgeapp/shared/domain/testcase"
+import { translateWithOllama } from "./backendServer";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:3001";
 
@@ -162,6 +163,21 @@ export const api = {
         targetLanguage: string,
         provider: "ollama" | "google" | "deepl" = "ollama"
     ) => {
+        // Use backend proxy for Ollama (secured with exchange key)
+        if (provider === "ollama" || provider === undefined) {
+            const response = await translateWithOllama({
+                text: problemStatement,
+                targetLanguage,
+                sourceLanguage: "en"
+            });
+            
+            if (response.data) {
+                return { translation: response.data.translated };
+            }
+            throw new Error(response.error || "Translation failed");
+        }
+
+        // Fall back to old API for other providers (if they exist)
         const res = await fetch("/api/translate-problem", {
             method: "POST",
             credentials: "include",

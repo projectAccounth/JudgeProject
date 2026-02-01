@@ -7,6 +7,7 @@ import {
     generateFeedback,
     type BeginnerChecklistItem,
 } from "@/app/lib/error-analyzer";
+import { analyzeCodeWithOllama } from "@/app/lib/backendServer";
 import { AIAnalysisBox } from "./AIAnalysisBox";
 import styles from "./SubmissionDetail.module.css";
 import { Submission } from "@judgeapp/shared/domain/submission";
@@ -79,29 +80,22 @@ async function analyzeSubmission(submission: Submission, userLanguage: string): 
 
     if (!hasCompilerError && hasFailedTests) {
         try {
-            const response = await fetch("/api/analyze-logic", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    sourceCode: submission.sourceCode,
-                    language: submission.language,
-                    testResults: submission.result,
-                    targetLanguage: userLanguage,
-                }),
+            const response = await analyzeCodeWithOllama({
+                sourceCode: submission.sourceCode,
+                language: submission.language,
+                testResults: submission.result,
+                targetLanguage: userLanguage,
             });
 
-            if (response.ok) {
-                const data = await response.json();
-                aiExplanation = data.explanation || "";
-                aiTip = data.tip || "";
-                aiPassRate = data.passRate || "";
-                console.log("Ollama Analysis:", { explanation: aiExplanation, tip: aiTip, cached: data._cached });
+            if (response.data) {
+                aiExplanation = response.data.explanation || "";
+                aiTip = response.data.tip || "";
+                console.log("Code Analysis:", { explanation: aiExplanation, tip: aiTip });
             } else {
-                const error = await response.text();
-                console.error("Ollama API error:", response.status, error);
+                console.error("Analysis error:", response.status, response.error);
             }
         } catch (error) {
-            console.error("Failed to analyze logic:", error);
+            console.error("Failed to analyze code:", error);
         }
     }
 

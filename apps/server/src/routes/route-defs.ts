@@ -6,6 +6,7 @@ import { UserAdminController } from "../controllers/user-admin.controller";
 import { ProblemAdminController } from "../controllers/problem-admin.controller";
 import { SubmissionAdminController } from "../controllers/submission-admin.controller";
 import { TeacherController } from "../controllers/teacher.controller";
+import { OllamaService } from "../services/ollama.service";
 import { 
     SubmissionCreateSchema,
     type SubmissionCreateRequest
@@ -297,7 +298,8 @@ export const analysisRoutes = (
 ): AppRoute[] => [
     {
         method: "POST", 
-        path: "/analysis-cache/generate-key", 
+        path: "/analysis-cache/generate-key",
+        auth: { type: "EXCHANGE_KEY" },
         handler: async ({ body, user }) => {
             try {
                 const { sourceCode, language, testResults } = (body as any);
@@ -327,7 +329,8 @@ export const analysisRoutes = (
     },
     {
         method: "GET",
-        path: "/analysis-cache/stats", 
+        path: "/analysis-cache/stats",
+        auth: { type: "EXCHANGE_KEY" },
         handler: async ({ body, user }) => {
             try {
                 const stats = await analysisCacheService.getStats();
@@ -344,6 +347,7 @@ export const analysisRoutes = (
     {
         method: "GET",
         path: "/analysis-cache/:cacheKey",
+        auth: { type: "EXCHANGE_KEY" },
         handler: async ({ params, user }) => {
             try {
                 const { cacheKey } = (params as any);
@@ -379,7 +383,8 @@ export const analysisRoutes = (
     },
     {
         method: "POST", 
-        path: "/analysis-cache", 
+        path: "/analysis-cache",
+        auth: { type: "EXCHANGE_KEY" },
         handler: async ({ body, user }) => {
             try {
                 const { cacheKey, data } = (body as any);
@@ -816,3 +821,96 @@ export const contestRoutes = (
         }
     }
 ];
+
+/**
+ * Ollama Routes
+ * Server-to-server routes for AI analysis, protected by exchange key
+ */
+export const ollamaRoutes = (): AppRoute[] => {
+    const ollamaService = new OllamaService();
+
+    return [
+        {
+            method: "GET",
+            path: "/ollama/health",
+            auth: { type: "EXCHANGE_KEY" },
+            handler: async () => {
+                const available = await ollamaService.isAvailable();
+                return {
+                    available,
+                    status: available ? "ready" : "unavailable",
+                    model: process.env.OLLAMA_MODEL || "qwen2.5-coder:3b"
+                };
+            }
+        },
+        {
+            method: "POST",
+            path: "/ollama/generate",
+            auth: { type: "EXCHANGE_KEY" },
+            handler: async ({ body }) => {
+                try {
+                    const { prompt, options } = (body as any);
+                    if (!prompt) {
+                        return {
+                            code: 400,
+                            error: "Missing prompt"
+                        };
+                    }
+                    const response = await ollamaService.generate(prompt, options);
+                    return { response };
+                } catch (error) {
+                    return {
+                        code: 500,
+                        error: (error as Error).message
+                    };
+                }
+            }
+        },
+        {
+            method: "POST",
+            path: "/ollama/translate",
+            auth: { type: "EXCHANGE_KEY" },
+            handler: async ({ body }) => {
+                try {
+                    const { text, targetLanguage, sourceLanguage = "en" } = (body as any);
+                    if (!text || !targetLanguage) {
+                        return {
+                            code: 400,
+                            error: "Missing text or targetLanguage"
+                        };
+                    }
+                    const translated = await ollamaService.translate(text, targetLanguage, sourceLanguage);
+                    return { translated };
+                } catch (error) {
+                    return {
+                        code: 500,
+                        error: (error as Error).message
+                    };
+                }
+            }
+        },
+        {
+            method: "POST",
+            path: "/ollama/analyze-code",
+            auth: { type: "EXCHANGE_KEY" },
+            handler: async ({ body }) => {
+                try {
+                    const { sourceCode, language, testResults, targetLanguage = "en" } = (body as any);
+                    if (!sourceCode || !language) {
+                        return {
+                            code: 400,
+                            error: "Missing sourceCode or language"
+                        };
+                    }
+                    const result = await ollamaService.analyzeCodeLogic(sourceCode, language, testResults, targetLanguage);
+                    return result;
+                } catch (error) {
+                    return {
+                        code: 500,
+                        error: (error as Error).message
+                    };
+                }
+            }
+        }
+    ];
+}
